@@ -1,3 +1,4 @@
+import os
 import requests
 import logging
 from get_news_helpers import print_json_object
@@ -12,8 +13,7 @@ from get_news_helpers import print_json_object
 
 logging.basicConfig(level=logging.INFO)
 
-API_KEY = 'XXX-XXX-XXX'
-
+API_KEY = os.environ.get('NEWS_API_KEY')
 
 # Base API endpoints
 guardian = 'https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=' + API_KEY
