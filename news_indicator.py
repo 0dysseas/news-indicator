@@ -12,7 +12,7 @@ class NewsIndicator(object):
     def __init__(self):
         self.app = 'News-Indicator'
         absolute_path = os.path.dirname(os.path.abspath(__file__))
-        icon = os.path.join(absolute_path, 'news_icon.png')
+        icon = os.path.join(absolute_path, '/assets/news_icon.png')
         self.indicator = AppIndicator3.Indicator.new(self.app, icon, AppIndicator3.IndicatorCategory.OTHER)
         self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.create_menu())

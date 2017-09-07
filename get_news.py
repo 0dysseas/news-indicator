@@ -1,81 +1,84 @@
-import os
-import requests
+from Queue import Queue
+from threading import Thread
+from news import News
+from time import time
 import logging
-from get_news_helpers import print_json_object
+import os
+import sys
 
 # TODO-me: Add an attribution link that reads "Powered by NewsAPI"
 
-# TODO-me: Put the list of links in another module(base_API_endpoints) and import it from there using Queues to operate
-# on it
-
 # TODO-me: Split news and sports sources?
 
+# TODO-me: Put docstring comments in the functions
+
+# TODO-me: Check at the beginning when importing the modultes if it is python2 or python3.
+NUM_THREADS = 5
 
 logging.basicConfig(level=logging.INFO)
 
-API_KEY = os.environ.get('NEWS_API_KEY')
-
-# Base API endpoints
-guardian = 'https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=' + API_KEY
-al_jaz = 'https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=' + API_KEY
-hacker_news_top = 'https://newsapi.org/v1/articles?source=hacker-news&sortBy=top&apiKey=' + API_KEY
-nation_geog_top = 'https://newsapi.org/v1/articles?source=national-geographic&sortBy=top&apiKey=' + API_KEY
-tech_radar_top = 'https://newsapi.org/v1/articles?source=techradar&sortBy=top&apiKey=' + API_KEY
-next_web = 'https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest&apiKey=' + API_KEY
-ny_times = 'https://newsapi.org/v1/articles?source=the-new-york-times&sortBy=top&apiKey=' + API_KEY
-
-news_sources = [guardian, al_jaz, hacker_news_top, nation_geog_top, tech_radar_top, next_web, ny_times]
-
-latest_news = dict()
+try:
+    API_KEY = os.environ.get('NEWS_API_KEY')
+except KeyError:
+    print ('Please save your personal NewsAPI key to a "NEWS_API_KEY" env variable.')
+    sys.exit(1)
 
 
-class News(object):
+# news_sources = [guardian, al_jaz, hacker_news_top, nation_geog_top, tech_radar_top, next_web, ny_times]
+# guardian = 'https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=' + API_KEY
 
-    def __init__(self, sources):
-        self.sources = sources
+class DownloadWorker(Thread):
+
+    def __init__(self, input_queue):
+        Thread.__init__(self, target=self.download_content)
+        self.input_queue = input_queue
+
+    def download_content(self):
+        raise NotImplementedError
+
+
+class DownloadNewsWorker(object):
+
+    def __init__(self, output_queue):
+        self.output_queue = output_queue
 
     def __repr__(self):
-        return self.sources
-
-    @staticmethod
-    def delete_redundant_items(json_news, keys_to_del):
-        for item in keys_to_del:
-            del json_news[item]
-
-        return json_news
-
-    def form_news_structure(self, json_news):
-        keys_to_remove = ['status', 'sortBy']
-        sub_keys_to_remove = ['description', 'author', 'publishedAt']  # TODO-me: Handle the National Geographic case
-
-        self.delete_redundant_items(json_news, keys_to_remove)
-
-        for _, article in enumerate(json_news['articles']):
-            self.delete_redundant_items(article, sub_keys_to_remove)
+        return self.output_queue
 
     def retrieve_news(self):
-        for key, value in enumerate(self.sources):
-            response = requests.get(value).json()
-            # print_json_object(response)
-            self.form_news_structure(response)
-            print_json_object(response)
+        # Create an input_queue to store all API endpoints
+        input_queue = Queue()
+
+        # Create the worker threads. The number is arbitrary and will be optimized based on performance
+        for i in range(NUM_THREADS):
+            download_worker = DownloadWorker(input_queue)
+            download_worker.setDaemon(True)  # Daemonize the working thread so as for the main thread to always exit
+            download_worker.start()
+        # TODO-me: Refactor the below into a helper function
+        absolute_path = os.path.dirname(os.path.abspath(__file__))
+        source_file = os.path.join(absolute_path, '/assets/news_sources.txt')
+        with open(source_file, 'r') as f:
+            news_sources = dict()
+            for line in f:
+                if not line.startswith('#') and line.split():
+                    split_line = line.split(' = ')
+                    news_sources[split_line[0]] = split_line[1]
+
+        #TODO-me: Append to each value of the news_sources the API_KEY
+
+
 
 
 def main():
-    news = News(news_sources)
+
+    start = time()
+    # news = News(news_sources)
+
     logging.info('Retrieving news...')
-    news.retrieve_news()
+    # news.retrieve_news()
+    print("Finished in: {}".format(time()-start))
 
 
 if __name__ == '__main__':
 
     main()
-
-
-
-
-
-
-
-
-
