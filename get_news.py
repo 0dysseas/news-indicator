@@ -2,6 +2,7 @@ from Queue import Queue
 from threading import Thread
 from news import News
 from time import time
+from news_helpers import get_news_sources_from_file
 import logging
 import os
 import sys
@@ -12,15 +13,15 @@ import sys
 
 # TODO-me: Put docstring comments in the functions
 
-# TODO-me: Check at the beginning when importing the modultes if it is python2 or python3.
+# TODO-me: Check at the beginning when importing the modules if it is python2 or python3.
 NUM_THREADS = 5
 
 logging.basicConfig(level=logging.INFO)
 
 try:
-    API_KEY = os.environ.get('NEWS_API_KEY')
+    API_KEY = str(os.environ.get('NEWS_API_KEY'))
 except KeyError:
-    print ('Please save your personal NewsAPI key to a "NEWS_API_KEY" env variable.')
+    print ('Please save your personal NewsAPI key in a "NEWS_API_KEY" env variable.')
     sys.exit(1)
 
 
@@ -52,30 +53,25 @@ class DownloadNewsWorker(object):
         # Create the worker threads. The number is arbitrary and will be optimized based on performance
         for i in range(NUM_THREADS):
             download_worker = DownloadWorker(input_queue)
-            download_worker.setDaemon(True)  # Daemonize the working thread so as for the main thread to always exit
+            download_worker.setDaemon(True)  # Daemonize the working thread so as the main thread to always exit
             download_worker.start()
-        # TODO-me: Refactor the below into a helper function
-        absolute_path = os.path.dirname(os.path.abspath(__file__))
-        source_file = os.path.join(absolute_path, '/assets/news_sources.txt')
-        with open(source_file, 'r') as f:
-            news_sources = dict()
-            for line in f:
-                if not line.startswith('#') and line.split():
-                    split_line = line.split(' = ')
-                    news_sources[split_line[0]] = split_line[1]
 
-        #TODO-me: Append to each value of the news_sources the API_KEY
+        news_sources = get_news_sources_from_file()
+        # Put each news source into the queue
+        for key, val in news_sources.iteritems():
+            news_item = val + API_KEY
+            input_queue.put(news_item)
 
-
+        input_queue.join()
 
 
 def main():
 
     start = time()
-    # news = News(news_sources)
 
     logging.info('Retrieving news...')
-    # news.retrieve_news()
+    download = DownloadNewsWorker('re')
+    download.retrieve_news()
     print("Finished in: {}".format(time()-start))
 
 
