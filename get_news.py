@@ -1,11 +1,14 @@
-from Queue import Queue
-from threading import Thread
-from news import News
-from time import time
-from news_helpers import get_news_sources_from_file
 import logging
 import os
 import sys
+from time import time
+from Queue import Queue
+from threading import Thread
+
+import requests
+
+from news_helpers import print_json_object, get_news_sources_from_file, delete_redundant_items
+
 
 # TODO-me: Add an attribution link that reads "Powered by NewsAPI"
 
@@ -14,7 +17,7 @@ import sys
 # TODO-me: Put docstring comments in the functions
 
 # TODO-me: Check at the beginning when importing the modules if it is python2 or python3.
-NUM_THREADS = 5
+NUM_THREADS = 8
 
 logging.basicConfig(level=logging.INFO)
 
@@ -25,17 +28,32 @@ except KeyError:
     sys.exit(1)
 
 
-# news_sources = [guardian, al_jaz, hacker_news_top, nation_geog_top, tech_radar_top, next_web, ny_times]
-# guardian = 'https://newsapi.org/v1/articles?source=the-guardian-uk&sortBy=latest&apiKey=' + API_KEY
-
 class DownloadWorker(Thread):
 
     def __init__(self, input_queue):
         Thread.__init__(self, target=self.download_content)
         self.input_queue = input_queue
 
+    def _form_news_structure(self, json_news):
+        keys_to_remove = ['status', 'sortBy']
+        sub_keys_to_remove = ['description', 'author', 'publishedAt']  # TODO-me: Handle the National Geographic case
+
+        delete_redundant_items(json_news, keys_to_remove)
+
+        for _, article in enumerate(json_news['articles']):
+            delete_redundant_items(article, sub_keys_to_remove)
+
+        print 'printing json news{}'.format(json_news)
+        return json_news
+
     def download_content(self):
-        raise NotImplementedError
+        while True:
+            link = self.input_queue.get()
+            response = requests.get(link).json()
+            # print_json_object(response)
+            self._form_news_structure(response)
+
+            self.input_queue.task_done()
 
 
 class DownloadNewsWorker(object):
@@ -58,8 +76,8 @@ class DownloadNewsWorker(object):
 
         news_sources = get_news_sources_from_file()
         # Put each news source into the queue
-        for key, val in news_sources.iteritems():
-            news_item = val + API_KEY
+        for _, val in news_sources.iteritems():
+            news_item = '='.join([val, API_KEY])
             input_queue.put(news_item)
 
         input_queue.join()

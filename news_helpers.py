@@ -3,6 +3,7 @@ import os
 
 
 def print_json_object(obj):
+    print 'PRINTING JSON OBJECT'
     print (json.dumps(obj, indent=4))
 
 
@@ -15,7 +16,13 @@ def get_news_sources_from_file():
         for line in f:
             if not line.startswith('#') and line.split():
                 split_line = line.split(' = ')
-                news_sources[split_line[0]] = split_line[1]
+                news_sources[split_line[0]] = split_line[1].rstrip('\n')
 
     return news_sources
 
+
+def delete_redundant_items(json_news, keys_to_del):
+    for item in keys_to_del:
+        del json_news[item]
+
+        return json_news
