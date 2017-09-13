@@ -1,10 +1,11 @@
 import os
-import gi
 import signal
+import gi
 gi.require.version('Gtk', '3.0')
 gi.require.version('AppIndicator3', '0.1')
-from gi.repository import Gtk
-from gi.repository import AppIndicator3
+
+from gi.repository import Gtk, AppIndicator3
+
 
 
 class NewsIndicator(object):
