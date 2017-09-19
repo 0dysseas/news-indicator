@@ -1,15 +1,15 @@
 import os
 import signal
+
 import gi
-gi.require.version('Gtk', '3.0')
-gi.require.version('AppIndicator3', '0.1')
 
-from gi.repository import Gtk, AppIndicator3
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
 
+from gi.repository import Gtk, AppIndicator3, GObject
 
 
 class NewsIndicator(object):
-
     def __init__(self):
         self.app = 'News-Indicator'
         absolute_path = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +20,7 @@ class NewsIndicator(object):
         self.indicator.set_label('News', self.app)
 
     def create_menu(self):
-        menu = Gtk.menu()
+        menu = Gtk.Menu()
         first_item = Gtk.MenuItem('Test_News_Item')
         menu.append(first_item)
 
@@ -37,6 +37,8 @@ class NewsIndicator(object):
     def stop(self, source):
         Gtk.main_quit()
 
-NewsIndicator()
-signal.signal(signal.SIGINT, signal.SIG_DFL)
-Gtk.main()
+
+if __name__ == '__main__':
+    NewsIndicator()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    Gtk.main()

@@ -3,7 +3,7 @@ import os
 
 
 def print_json_object(obj):
-    print 'PRINTING JSON OBJECT'
+    print 'Printing JSON object'
     print (json.dumps(obj, indent=4))
 
 
@@ -25,4 +25,4 @@ def delete_redundant_items(json_news, keys_to_del):
     for item in keys_to_del:
         del json_news[item]
 
-        return json_news
+    return json_news
