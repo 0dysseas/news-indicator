@@ -1,5 +1,4 @@
 import os
-import signal
 
 import gi
 
@@ -9,51 +8,59 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, AppIndicator3, GObject
 
 
+# TODO-me: Refactor the class into a module
 class NewsIndicator(object):
-    def __init__(self, news_list):
-        self.app = 'News-Indicator'
-        self.news_list = news_list
 
+    menu = None
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def init_indicator(cls):
+        cls.app = 'News-Indicator'
         absolute_path = os.path.dirname(os.path.abspath(__file__))
         icon = os.path.join(absolute_path, 'assets/news_icon.png')
 
-        self.indicator = AppIndicator3.Indicator.new(self.app, icon, AppIndicator3.IndicatorCategory.OTHER)
-        self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-        print('hello')
-        # self.x = self.indicator.get_menu()  #TODO-me:Use this!
-        print('hello_2')
-        self.indicator.set_menu(self.create_menu(self.news_list))
-        print('hello_3')
-        self.indicator.set_label('News', self.app)
+        cls.indicator = AppIndicator3.Indicator.new(cls.app, icon, AppIndicator3.IndicatorCategory.OTHER)
+        cls.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
-    def create_menu(self, menu_items_list):
+        return True
 
-        # if current_menu and current_menu.get_children():  #TODO-me: Make it work
-        #     print('in here')
-        #     for item in current_menu.get_children():
-        #         current_menu.remove(item)
+    @classmethod
+    def create_menu(cls, menu_items):
+        cls.menu = Gtk.Menu()
 
-        menu = Gtk.Menu()
-
-        for k, v in enumerate(menu_items_list):
+        for k, v in enumerate(menu_items):
             first_item = Gtk.MenuItem(v['title'])
-            menu.append(first_item)
+            cls.menu.append(first_item)
             separator = Gtk.SeparatorMenuItem()
-            menu.append(separator)
+            cls.menu.append(separator)
 
         quit_item = Gtk.MenuItem('Quit')
-        quit_item.connect('activate', self.stop)
-        menu.append(quit_item)
+        quit_item.connect('activate', NewsIndicator.stop)
+        cls.menu.append(quit_item)
 
-        menu.show_all()
-        return menu
+        cls.menu.show_all()
+        cls.indicator.set_menu(cls.menu)
+        cls.indicator.set_label('News', cls.app)
 
-    def stop(self, source):
+        return cls.menu
+
+    @classmethod
+    def create_and_update_menu(cls, upd_menu, list_of_news):  #TODO-me: Rename the upd_menu var
+        if upd_menu is None:
+            cls.create_menu(list_of_news)
+        else:
+            cls.remove_old_menu_entries(upd_menu)
+            cls.create_menu(list_of_news)
+
+    @classmethod
+    def remove_old_menu_entries(cls, old_menu):
+        if old_menu.get_children():
+            for item in old_menu.get_children():
+                old_menu.remove(item)
+
+    @staticmethod
+    def stop():
         Gtk.main_quit()
-
-#
-# if __name__ == '__main__':
-#     # NewsIndicator()
-#     # signal.signal(signal.SIGINT, signal.SIG_DFL)
-#     # Gtk.main()
-

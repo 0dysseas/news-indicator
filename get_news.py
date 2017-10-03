@@ -2,7 +2,6 @@ import logging
 import os
 import signal
 import sys
-from time import time
 from Queue import Queue
 from threading import Thread
 
@@ -62,12 +61,9 @@ class DownloadWorker(Thread):
 
         # Get the first four articles from each source
         for _, article in enumerate(json_1['articles'][:2]):
-            json_2 = delete_redundant_items(article, sub_keys_to_remove)
-
+            json_2 = delete_redundant_items(article, sub_keys_to_remove) # TODO-me: Rename the json_2
             self.out_queue.put(json_2)
 
-        # for k, v in enumerate(self.out_queue):
-        #     print k, v
         return json_news
 
     def download_content(self):
@@ -110,37 +106,27 @@ class DownloadNewsWorker(object):
 @sched.scheduled_job('interval', minutes=2, name='my_job_1')  # TODO-me: Change the job_id
 def main():
 
-    # start = time()
-
     output_queue = Queue()
 
     out_list = list()
 
-    print('here')
-    # logging.info('Retrieving news...')
+    logging.info('Retrieving news...')
     download = DownloadNewsWorker(output_queue)
     download.retrieve_news()
-    # logging.info('Printing output queue...')
-    # while not output_queue.empty():
-    #     print (output_queue.get())
-    # logging.info('Output..')
+
     while not output_queue.empty():
         item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.FInd a better way..
         out_list.append(item)
 
-    print('after')
-    # NewsIndicator(out_list)  # TODO-me: Update the idle thread not the main one
-    # signal.signal(signal.SIGINT, signal.SIG_DFL)
-    # Gtk.main()
     return out_list
-    # print("Finished in: {}".format(time()-start))
 
 
 # Listener that is triggered when each job is executed
 def my_listener(event):  # TODO-me:Rename this
     if event.retval:
-        print event.retval
-        NewsIndicator(event.retval)  # Feed the out_list of main() to NewsIndicator
+
+        NewsIndicator.init_indicator()
+        NewsIndicator.create_and_update_menu(NewsIndicator.menu, event.retval)
         Gtk.main()
 
 
@@ -148,10 +134,3 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     sched.add_listener(my_listener, EVENT_JOB_EXECUTED)
     sched.start()
-
-    # print('before')
-    # final_list = main()
-    # print('after')
-    # NewsIndicator(final_list)  #TODO-me: Update the idle thread not the main one
-    # signal.signal(signal.SIGINT, signal.SIG_DFL)
-    # Gtk.main()
