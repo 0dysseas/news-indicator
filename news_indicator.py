@@ -8,7 +8,6 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, AppIndicator3, GObject
 
 
-# TODO-me: Refactor the class into a module
 class NewsIndicator(object):
 
     menu = None
