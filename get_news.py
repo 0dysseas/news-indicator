@@ -4,6 +4,7 @@ import signal
 import sys
 from Queue import Queue
 from threading import Thread
+from datetime import datetime
 
 import gi
 
@@ -12,11 +13,11 @@ gi.require_version('AppIndicator3', '0.1')
 
 from gi.repository import Gtk, AppIndicator3, GObject
 from apscheduler.schedulers.background import BlockingScheduler
-from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_ALL
+from apscheduler.events import EVENT_JOB_EXECUTED
 import requests
 
 from news_indicator import NewsIndicator
-from news_helpers import print_json_object, get_news_sources_from_file, delete_redundant_items
+from news_helpers import get_news_sources_from_file, delete_redundant_items
 
 
 # TODO-me: Add an attribution link that reads "Powered by NewsAPI"
@@ -103,7 +104,7 @@ class DownloadNewsWorker(object):
         input_queue.join()
 
 
-@sched.scheduled_job('interval', minutes=2, name='my_job_1')  # TODO-me: Change the job_id
+@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, name='my_job_1')  # TODO-me: Change the job_id
 def main():
 
     output_queue = Queue()
