@@ -17,7 +17,7 @@ from apscheduler.events import EVENT_JOB_EXECUTED
 import requests
 
 from news_indicator import NewsIndicator
-from news_helpers import get_news_sources_from_file, delete_redundant_items
+from news_helpers import get_news_sources_from_file, delete_redundant_items, print_json_object
 
 
 # TODO-me: Add an attribution link that reads "Powered by NewsAPI"
@@ -58,12 +58,12 @@ class DownloadWorker(Thread):
         sub_keys_to_remove = ['description', 'author', 'publishedAt']  # TODO-me: Handle the National Geographic case
 
         # TODO-me: Optimize below code!
-        json_1 = delete_redundant_items(json_news, keys_to_remove)
+        filtered_news_sources_format = delete_redundant_items(json_news, keys_to_remove)
 
         # Get the first four articles from each source
-        for _, article in enumerate(json_1['articles'][:2]):
-            json_2 = delete_redundant_items(article, sub_keys_to_remove) # TODO-me: Rename the json_2
-            self.out_queue.put(json_2)
+        for _, article in enumerate(filtered_news_sources_format['articles'][:2]):
+            final_news_sources_format = delete_redundant_items(article, sub_keys_to_remove)
+            self.out_queue.put(final_news_sources_format)
 
         return json_news
 
@@ -104,7 +104,7 @@ class DownloadNewsWorker(object):
         input_queue.join()
 
 
-@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, name='my_job_1')  # TODO-me: Change the job_id
+@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, name='retrieve_news_job')
 def main():
 
     output_queue = Queue()
@@ -117,21 +117,22 @@ def main():
 
     while not output_queue.empty():
         item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.FInd a better way..
+        print_json_object(item)
         out_list.append(item)
 
     return out_list
 
 
 # Listener that is triggered when each job is executed
-def my_listener(event):  # TODO-me:Rename this
+def listen_for_new_updates(event):
     if event.retval:
 
-        NewsIndicator.init_indicator()
-        NewsIndicator.create_and_update_menu(NewsIndicator.menu, event.retval)
+        news_indicator = NewsIndicator()
+        news_indicator.create_and_update_menu(NewsIndicator.menu, event.retval)
         Gtk.main()
 
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    sched.add_listener(my_listener, EVENT_JOB_EXECUTED)
+    sched.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     sched.start()
