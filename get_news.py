@@ -104,7 +104,7 @@ class DownloadNewsWorker(object):
         input_queue.join()
 
 
-@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, name='retrieve_news_job')
+@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=20, name='retrieve_news_job')
 def main():
 
     output_queue = Queue()

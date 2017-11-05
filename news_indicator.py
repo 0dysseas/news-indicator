@@ -3,6 +3,8 @@ import webbrowser
 
 import gi
 
+import news_indicator_about
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
@@ -39,21 +41,21 @@ class NewsIndicator(object):
         Gtk.main_quit()
 
     def on_about(self):
-        pass
+        news_indicator_about.render_about_window()
 
     def on_settings(self):
         pass
 
-    def remove_old_menu_entries(self, old_menu):
-        if old_menu.get_children():
-            for item in old_menu.get_children():
-                old_menu.remove(item)
+    def remove_previous_menu_entries(self, previous_menu):
+        if previous_menu.get_children():
+            for item in previous_menu.get_children():
+                previous_menu.remove(item)
 
-    def create_and_update_menu(self, upd_menu, list_of_news):  #TODO-me: Rename the upd_menu var
-        if upd_menu is None:
+    def create_and_update_menu(self, menu_id, list_of_news):
+        if menu_id is None:
             self.create_menu(list_of_news)
         else:
-            self.remove_old_menu_entries(upd_menu)
+            self.remove_previous_menu_entries(menu_id)
             self.create_menu(list_of_news)
 
     def create_menu(self, menu_items):
