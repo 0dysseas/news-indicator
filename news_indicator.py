@@ -40,8 +40,10 @@ class NewsIndicator(object):
     def stop(self):
         Gtk.main_quit()
 
+    @staticmethod
     def on_about(self):
         news_indicator_about.render_about_window()
+        # news_indicator_about.IndicatorABoutWindow()
 
     def on_settings(self):
         pass
