@@ -3,7 +3,7 @@ import webbrowser
 
 import gi
 
-import news_indicator_about
+import about_and_settings_wins
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
@@ -42,10 +42,11 @@ class NewsIndicator(object):
 
     @staticmethod
     def on_about(self):
-        news_indicator_about.render_about_window()
+        about_and_settings_wins.render_about_window()
 
+    @staticmethod
     def on_settings(self):
-        pass
+        about_and_settings_wins.render_settings_window()
 
     def remove_previous_menu_entries(self, previous_menu):
         if previous_menu.get_children():
