@@ -85,7 +85,7 @@ class NewsIndicator(object):
 
         # quit item
         quit_item = Gtk.MenuItem('Quit')
-        quit_item.connect('activate', NewsIndicator.stop)
+        quit_item.connect('activate', self.stop)
         self.menu.append(quit_item)
 
         self.menu.show_all()

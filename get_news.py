@@ -19,9 +19,6 @@ import requests
 from news_indicator import NewsIndicator
 from news_helpers import get_news_sources_from_file, delete_redundant_items, print_json_object
 
-
-# TODO-me: Add an attribution link that reads "Powered by NewsAPI"
-
 # TODO-me: Split news and sports sources? Use beautifulsoup for greek sites
 
 # TODO-me: Check  importing the modules if it is python2 or python3.
@@ -46,7 +43,7 @@ except ImportError:
 class DownloadWorker(Thread):
 
     def __init__(self, input_queue, out_queue):
-        Thread.__init__(self, target=self.download_content)  # TODO-me: Add intervals for continuous thread running i.e. downloading of sources
+        Thread.__init__(self, target=self.download_content)
         self.input_queue = input_queue
         self.out_queue = out_queue
 
