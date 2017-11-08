@@ -51,7 +51,22 @@ class Settings(Gtk.Window):
         switch.props.valign = Gtk.Align.CENTER
         horizontal_box.pack_start(switch, False, True, 0)
 
-        listbox.add(row)        
+        listbox.add(row)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+        row.add(hbox)
+        label = Gtk.Label("Retrieval Intervals", xalign=0)
+        combo = Gtk.ComboBoxText()
+        combo.insert(0, "0", "5 Mins")
+        combo.insert(1, "1", "15 Mins")
+        combo.insert(2, "2", "20 Mins")
+        combo.insert(3, "3", "30 Mins")
+        combo.insert(4, "4", "60 Mins")
+        hbox.pack_start(label, True, True, 0)
+        hbox.pack_start(combo, False, True, 0)
+
+        listbox.add(row)
 
     def __repr__(self):
         return self.get_title()
