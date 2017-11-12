@@ -1,21 +1,39 @@
 import os
+import signal
+import logging
 import webbrowser
+from Queue import Queue
+from datetime import datetime
 
 import gi
 
 import about_and_settings_wins
+from news_helpers import get_news_sources_from_file, delete_redundant_items, print_json_object
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
 from gi.repository import Gtk, AppIndicator3, GObject
+from apscheduler.schedulers.background import BlockingScheduler
+from apscheduler.events import EVENT_JOB_EXECUTED
+
+from get_news import DownloadNewsWorker
 
 APP = 'News-Indicator'
+JOB_ID = 'news_job'
+
+try:
+    sched = BlockingScheduler()
+except ImportError:
+    print ('Failed to import Scheduler')
+    sys.exit(1)
 
 
 class NewsIndicator(object):
     # Class variables to be shared among all NewsIndicator instances
     menu = None
+    update_interval = 10 #TODO-me: Change this back to 10
+    # settings_called = False
     absolute_path = os.path.dirname(os.path.abspath(__file__))
     icon = os.path.join(absolute_path, 'assets/news_icon.png')
 
@@ -24,6 +42,7 @@ class NewsIndicator(object):
 
     def __init__(self):
         self.app = APP
+        self.settings_changed = False
 
     def __repr__(self):
         return self.app
@@ -38,7 +57,7 @@ class NewsIndicator(object):
 
     @staticmethod
     def stop(self):
-        Gtk.main_quit()
+        Gtk.main_quit()  #TODO-me: scheduler.shutdown(wait=False) gia na kleisei o scheduler kai meta quit = sys.exit(1)
 
     @staticmethod
     def on_about(self):
@@ -46,19 +65,34 @@ class NewsIndicator(object):
 
     @staticmethod
     def on_settings(self):
-        about_and_settings_wins.render_settings_window()
+        # Settings was called
+        # self.settings_called = True
+        # print('in settings, window is {}'.format(id(sett)))
+        self.settings_changed, self.update_interval = about_and_settings_wins.render_settings_window()
+        print('in settings, interval is{a} and changed is {b}'.format(a=self.update_interval, b=self.settings_changed))
+        if self.settings_changed:
+            modify_scheduler(JOB_ID, int(self.update_interval))
 
-    def remove_previous_menu_entries(self, previous_menu):
-        if previous_menu.get_children():
-            for item in previous_menu.get_children():
-                previous_menu.remove(item)
+        # return self.settings_changed, self.update_interval
+
+    # def remove_previous_menu_entries(self, previous_menu):
+    #     print('In remove_previous')
+    #     if previous_menu.get_children():  # TODO-me: Don't remove the about and settings menu items
+    #         for item in previous_menu.get_children():
+    #             print('item is {}'.format(item))
+    #             previous_menu.remove(item)
 
     def create_and_update_menu(self, menu_id, list_of_news):
-        if menu_id is None:
+        # At first create the first instance of the menu
+        # if menu_id is None:
+            print('in create menu is None')
             self.create_menu(list_of_news)
-        else:
-            self.remove_previous_menu_entries(menu_id)
-            self.create_menu(list_of_news)
+        # Then each time this function is called, remove the previous menu entries and create a new menu
+        # with the new news articles
+        # else:
+        #     print('in create menu is NOT None')
+        #     self.remove_previous_menu_entries(menu_id)
+        #     self.create_menu(list_of_news)
 
     def create_menu(self, menu_items):
         self.menu = Gtk.Menu()
@@ -94,6 +128,60 @@ class NewsIndicator(object):
 
         return self.menu
 
+# TODO-me: Minutes to be changed back to default -> 10mins
+@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, id=JOB_ID, name='retrieve_news_job')
+def main():
 
+    output_queue = Queue()
+
+    out_list = list()
+
+    logging.info('Retrieving news...')
+    download = DownloadNewsWorker(output_queue)
+    download.retrieve_news()
+
+    while not output_queue.empty():
+        item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.FInd a better way..
+        print_json_object(item)
+        out_list.append(item)
+
+    return out_list
+
+
+# Listener that is triggered when each job is executed
+def listen_for_new_updates(event):
+    if event.retval:
+
+        # news_indicator = NewsIndicator()
+        # set_win = about_and_settings_wins.create_overall_settings_window()
+        # print ('set_win id is {}'.format(id(set_win)))
+        news_indicator.create_and_update_menu(NewsIndicator.menu, event.retval)
+        # changed_interv, interv = news_indicator.settings_changed, news_indicator.update_interval
+        # changed_interv, interv = news_indicator.on_settings()
+        # if changed_interv:
+        #     # if interv != 2: # Change this back to 10 min
+        #     print('In changed_interv, id is:{}'.format(event.job_id))
+        #     print ('In changed_interv, interv is:{}'.format(interv))
+        #     # Unschedule decorated function
+        #     # sched.remove_job(event.job_id)
+        #     modify_scheduler(event.job_id, interv)
+        Gtk.main()
+
+
+def modify_scheduler(job_id, new_interval):
+    print ('Modified job')
+    print('In modify_scheduler, id is:{}'.format(job_id))
+    print ('In modify_scheduler, interv is:{}'.format(new_interval))
+    sched.reschedule_job(job_id, trigger='interval', minutes=new_interval)
+
+
+if __name__ == '__main__':
+    news_indicator = NewsIndicator()
+    # create the Settings window but don't render it until the user selects sth
+    # set_win = about_and_settings_wins.create_overall_settings_window()
+    # print ('set_win id is {}'.format(id(set_win)))
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    sched.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
+    sched.start()
 
 
