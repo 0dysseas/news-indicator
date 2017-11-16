@@ -7,9 +7,19 @@ def print_json_object(obj):
     print (json.dumps(obj, indent=4))
 
 
-def get_news_sources_from_file():
+def get_asset(asset='sources'):
     absolute_path = os.path.dirname(os.path.abspath(__file__))
-    source_file = os.path.join(absolute_path, 'assets/news_sources.txt')
+
+    if asset is not 'sources':
+        source_file = os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
+    else:
+        source_file = os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
+
+    return source_file
+
+
+def get_news_sources_from_file():
+    source_file = get_asset()
 
     with open(source_file, 'r') as f:
         news_sources = dict()

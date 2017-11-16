@@ -11,7 +11,7 @@ gi.require_version('AppIndicator3', '0.1')
 
 import requests
 
-from news_helpers import get_news_sources_from_file, delete_redundant_items
+from utils import get_news_sources_from_file, delete_redundant_items
 
 # TODO-me: Split news and sports sources? Use beautifulsoup for greek sites
 

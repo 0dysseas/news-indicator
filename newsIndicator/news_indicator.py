@@ -17,13 +17,14 @@ from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED
 
 from get_news import DownloadNewsWorker
+from utils import get_asset
 from about_and_settings_wins import SettingsState
 
 APP = 'News-Indicator'
 JOB_ID = 'news_job'
 
 try:
-    sched = BlockingScheduler()
+    scheduler = BlockingScheduler()
 except ImportError:
     print ('Failed to import Scheduler')
     sys.exit(1)
@@ -32,10 +33,9 @@ except ImportError:
 class NewsIndicator(object):
     # Class variables to be shared among all NewsIndicator instances
     menu = None
-    update_interval = 10 #TODO-me: Change this back to 10
-    # settings_called = False
-    absolute_path = os.path.dirname(os.path.abspath(__file__))
-    icon = os.path.join(absolute_path, 'assets/news_icon.png')
+    update_interval = 10
+
+    icon = get_asset(asset='icon')
 
     indicator = AppIndicator3.Indicator.new(APP, icon, AppIndicator3.IndicatorCategory.OTHER)
     indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
@@ -48,7 +48,7 @@ class NewsIndicator(object):
         return self.app
 
     @staticmethod
-    def open_news_url(self, url):
+    def open_news_url(url):
         try:
             if not webbrowser.open_new_tab(url):
                 raise webbrowser.Error
@@ -65,13 +65,15 @@ class NewsIndicator(object):
 
     @staticmethod
     def on_settings(self):
-        cld, intrv = settings_state.get_state()
-        settings_changed, update_interval = about_and_settings_wins.render_settings_window(cld, intrv, settings_state)
+        selected_status, selected_interval = settings_state.get_state()
+        settings_changed, update_interval = about_and_settings_wins.render_settings_window(selected_status,
+                                                                                           selected_interval,
+                                                                                           settings_state)
         settings_state.update_state(settings_changed, update_interval)
-        if settings_state.set_called:
-            modify_scheduler(JOB_ID, int(settings_state.set_interv))
+        if settings_state.settings_triggered:
+            modify_scheduler(JOB_ID, int(settings_state.settings_interval))
 
-    def create_and_update_menu(self, menu_id, list_of_news):
+    def create_and_update_menu(self, list_of_news):
         print('in create menu is None')
         self.create_menu(list_of_news)
 
@@ -109,10 +111,8 @@ class NewsIndicator(object):
 
         return self.menu
 
-# TODO-me: Minutes to be changed back to default -> 10mins
 
-
-@sched.scheduled_job('interval', next_run_time=datetime.now(), minutes=2, id=JOB_ID, name='retrieve_news_job')
+@scheduler.scheduled_job('interval', next_run_time=datetime.now(), minutes=10, id=JOB_ID, name='retrieve_news_job')
 def main():
 
     output_queue = Queue()
@@ -130,10 +130,10 @@ def main():
     return out_list
 
 
-# Listener that is triggered when each job is executed
+# Listener that's triggered when each job is executed
 def listen_for_new_updates(event):
     if event.retval:
-        news_indicator.create_and_update_menu(NewsIndicator.menu, event.retval)
+        news_indicator.create_and_update_menu(event.retval)
         Gtk.main()
 
 
@@ -141,14 +141,14 @@ def modify_scheduler(job_id, new_interval):
     print ('Modified job')
     print('In modify_scheduler, id is:{}'.format(job_id))
     print ('In modify_scheduler, interv is:{}'.format(new_interval))
-    sched.reschedule_job(job_id, trigger='interval', minutes=new_interval)
+    scheduler.reschedule_job(job_id, trigger='interval', minutes=new_interval)
 
 
 if __name__ == '__main__':
     news_indicator = NewsIndicator()
     settings_state = SettingsState(False, 0)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    sched.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
-    sched.start()
+    scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
+    scheduler.start()
 
 

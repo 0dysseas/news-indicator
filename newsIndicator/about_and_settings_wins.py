@@ -98,7 +98,7 @@ class Settings(Gtk.Window):
         self.settings_called = True
         state.set_called = True
         print('Settings changed and value is:{}'.format(self.settings_called))
-        model = combo.get_model()
+        # model = combo.get_model()
         index = combo.get_active_text()
         active = combo.get_active()
         print('Model is:')
@@ -124,19 +124,19 @@ class Settings(Gtk.Window):
 
 class SettingsState(object):
 
-    def __init__(self, set_called, set_interv):
-        self.set_called = set_called
-        self.set_interv = set_interv
+    def __init__(self, settings_triggered, settings_interval):
+        self.settings_triggered = settings_triggered
+        self.settings_interval = settings_interval
 
     def get_state(self):
-        print ('State now is: {}'.format(self.set_called))
-        print ('Interval now is: {}'.format(self.set_interv))
+        print ('State now is: {}'.format(self.settings_triggered))
+        print ('Interval now is: {}'.format(self.settings_interval))
 
-        return self.set_called, self.set_interv
+        return self.settings_triggered, self.settings_interval
 
-    def update_state(self, new_called, new_interv):
-        self.set_called = new_called
-        self.set_interv = new_interv
+    def update_state(self, new_settings_instance_trig, new_interval):
+        self.settings_triggered = new_settings_instance_trig
+        self.settings_interval = new_interval
 
 
 def render_settings_window(s_called, s_int, s_state):
