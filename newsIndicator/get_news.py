@@ -77,7 +77,8 @@ class DownloadNewsWorker(object):
         # Create the worker threads. The number is arbitrary and will be optimized based on performance
         for i in range(NUM_THREADS):
             download_worker = DownloadWorker(input_queue, self.output_queue)
-            download_worker.setDaemon(True)  # Daemonize the working thread so as the main thread always exits
+            # Daemonize the working thread so as the main thread always exits
+            download_worker.setDaemon(True)
             download_worker.start()
 
         news_sources = get_news_sources_from_file()

@@ -71,7 +71,7 @@ class NewsIndicator(object):
                                                                                            selected_interval,
                                                                                            settings_state)
         settings_state.update_state(settings_changed, update_interval)
-        if settings_state.settings_triggered:
+        if settings_state.intrvl_change_trig:
             modify_scheduler(JOB_ID, int(settings_state.settings_interval))
 
     def create_and_update_menu(self, list_of_news):
@@ -147,7 +147,8 @@ def modify_scheduler(job_id, new_interval):
 
 if __name__ == '__main__':
     news_indicator = NewsIndicator()
-    settings_state = SettingsState(False, 0)
+    # Init the default newsIndicator settings state to: news retrieval per 10' & notifications OFF
+    settings_state = SettingsState(False, 0, False)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     scheduler.start()

@@ -75,7 +75,7 @@ class Settings(Gtk.Window):
         combo.insert(4, "4", "60 Mins")
         # Default retrieval time is 10 mins
         combo.set_active(self.interval)
-        combo.connect('changed', self.on_change, state)
+        combo.connect('changed', self.on_interval_change, state)
         hbox.pack_start(retrieval_label, True, True, 0)
         hbox.pack_start(combo, False, True, 0)
 
@@ -94,7 +94,7 @@ class Settings(Gtk.Window):
         apply_button.connect('activate', self.on_apply)
         cancel_button.connect('activate', self.on_cancel)
 
-    def on_change(self, combo, state):
+    def on_interval_change(self, combo, state):
         self.settings_called = True
         state.set_called = True
         print('Settings changed and value is:{}'.format(self.settings_called))
@@ -124,18 +124,28 @@ class Settings(Gtk.Window):
 
 class SettingsState(object):
 
-    def __init__(self, settings_triggered, settings_interval):
-        self.settings_triggered = settings_triggered
+    def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
+        # Notification switch state variables
+        self.notification_change_trig = ntfc_change_trig
+        self.notification_state = notification_state
+        # Interval dd menu state variables
+        self.intrvl_change_trig = intrvl_change_trig
         self.settings_interval = settings_interval
 
     def get_state(self):
-        print ('State now is: {}'.format(self.settings_triggered))
+        print ('Interval state now is: {}'.format(self.intrvl_change_trig))
         print ('Interval now is: {}'.format(self.settings_interval))
+        print ('Notifications state now is: {}'.format(self.notification_change_trig))
+        print ('Notifications are now: {}'.format(self.settings_interval))
 
-        return self.settings_triggered, self.settings_interval
+        return self.intrvl_change_trig, self.settings_interval
 
-    def update_state(self, new_settings_instance_trig, new_interval):
-        self.settings_triggered = new_settings_instance_trig
+    def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
+        # Update notification switch state
+        self.notification_change_trig = new_ntfc_instance_trig
+        self.notification_state = new_ntfc_change
+        # Update interval option
+        self.intrvl_change_trig = new_settings_instance_trig
         self.settings_interval = new_interval
 
 
