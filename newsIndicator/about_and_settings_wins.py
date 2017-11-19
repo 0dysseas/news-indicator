@@ -27,9 +27,13 @@ class AboutWindow(Gtk.Window):
 
 class Settings(Gtk.Window):
 
-    def __init__(self, called, interv, state):
-        self.interval = interv
+    def __init__(self, called, interv, ntfc_called, ntfc_state, state):
+        # Store the state of the whole Settings window
         self.settings_called = called
+        self.interval = interv
+        self.notifications_called = ntfc_called
+        self.notifications_state = ntfc_state
+
         Gtk.Window.__init__(self, title="Settings")
         self.set_size_request(300, 200)
         self.set_border_width(10)
@@ -56,6 +60,9 @@ class Settings(Gtk.Window):
         # and its switch
         switch = Gtk.Switch()
         switch.props.valign = Gtk.Align.CENTER
+        # Default notifications state is OFF
+        switch.set_active(self.notifications_state)
+        switch.connect('state-set', self.on_notification_change, state)
         horizontal_box.pack_start(switch, False, True, 0)
 
         listbox.add(row)
@@ -96,7 +103,7 @@ class Settings(Gtk.Window):
 
     def on_interval_change(self, combo, state):
         self.settings_called = True
-        state.set_called = True
+        state.intrvl_change_trig = True
         print('Settings changed and value is:{}'.format(self.settings_called))
         # model = combo.get_model()
         index = combo.get_active_text()
@@ -109,8 +116,18 @@ class Settings(Gtk.Window):
             print('Number of minutes selected:')
             print index[:2]
             self.interval = active
-            state.set_interv = index[:2]
+            state.settings_interval = index[:2]
         return self.interval
+
+    def on_notification_change(self, switch, state):
+        self.notifications_called = True
+        state.notification_change_trig = True
+
+        state = switch.get_state()
+        switch.set_state(state)
+        self.notifications_state = state
+
+        return self.notifications_state
 
     def on_apply(self):
         pass
@@ -136,9 +153,9 @@ class SettingsState(object):
         print ('Interval state now is: {}'.format(self.intrvl_change_trig))
         print ('Interval now is: {}'.format(self.settings_interval))
         print ('Notifications state now is: {}'.format(self.notification_change_trig))
-        print ('Notifications are now: {}'.format(self.settings_interval))
+        print ('Notifications are now: {}'.format(self.notification_state))
 
-        return self.intrvl_change_trig, self.settings_interval
+        return self.intrvl_change_trig, self.settings_interval, self.notification_change_trig, self.notification_state
 
     def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
         # Update notification switch state
@@ -149,13 +166,13 @@ class SettingsState(object):
         self.settings_interval = new_interval
 
 
-def render_settings_window(s_called, s_int, s_state):
-    win = Settings(s_called, s_int, s_state)
+def render_settings_window(s_called, s_int, ntfc_called, ntfc_state, s_state):
+    win = Settings(s_called, s_int, ntfc_called, ntfc_state, s_state)
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()
     print ('in render_settings_window.called is{a} and interval is{b}'.format(a=win.settings_called, b=win.interval))
-    return win.settings_called, win.interval
+    return win.settings_called, win.interval, win.notifications_called, win.notifications_state
 
 
 def render_about_window():

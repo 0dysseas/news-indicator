@@ -66,11 +66,11 @@ class NewsIndicator(object):
 
     @staticmethod
     def on_settings(self):
-        selected_status, selected_interval = settings_state.get_state()
-        settings_changed, update_interval = about_and_settings_wins.render_settings_window(selected_status,
-                                                                                           selected_interval,
-                                                                                           settings_state)
-        settings_state.update_state(settings_changed, update_interval)
+        selected_status, selected_interval, ntfc_status, ntfc_state = settings_state.get_state()
+        settings_changed, update_interval, ntfc_changed, ntfc_selected = about_and_settings_wins.render_settings_window\
+            (selected_status, selected_interval, ntfc_status,  ntfc_state, settings_state)
+
+        settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
         if settings_state.intrvl_change_trig:
             modify_scheduler(JOB_ID, int(settings_state.settings_interval))
 
@@ -148,7 +148,7 @@ def modify_scheduler(job_id, new_interval):
 if __name__ == '__main__':
     news_indicator = NewsIndicator()
     # Init the default newsIndicator settings state to: news retrieval per 10' & notifications OFF
-    settings_state = SettingsState(False, 0, False)
+    settings_state = SettingsState(False, 0, False, False)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     scheduler.start()
