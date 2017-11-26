@@ -3,7 +3,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
-from gi.repository import GObject, Gtk
+from gi.repository import Gtk
 
 COMMENT = 'News_Indicator is an appindicator that retrieves the latest news articles,' \
           ' on a variety of topics from top media outlets.\n\n\nBuilt with Python and powered by NewsAPI.'
@@ -19,7 +19,6 @@ class AboutWindow(Gtk.Window):
         about = Gtk.AboutDialog()
         about.set_program_name('News_Indicator')
         about.set_comments(COMMENT)
-        #about.set_logo(put logo here) #TODO-me: Set logo here
         about.run()
         about.destroy()
 

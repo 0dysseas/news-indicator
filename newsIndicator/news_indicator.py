@@ -47,7 +47,7 @@ class NewsIndicator(object):
         return self.app
 
     @staticmethod
-    def open_news_url(url):
+    def open_news_url(self, url):
         try:
             if not webbrowser.open_new_tab(url):
                 raise webbrowser.Error
