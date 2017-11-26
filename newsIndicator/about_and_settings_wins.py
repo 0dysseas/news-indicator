@@ -1,5 +1,4 @@
 import gi
-import sys
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
@@ -9,6 +8,9 @@ from gi.repository import GObject, Gtk
 COMMENT = 'News_Indicator is an appindicator that retrieves the latest news articles,' \
           ' on a variety of topics from top media outlets.\n\n\nBuilt with Python and powered by NewsAPI.'
 
+# News retrieval intervals
+INTERVALS = {0: '10 Minutes', 1: '15 Minutes', 2: '20 Minutes', 3: '30 Minutes', 4: '60 Minutes'}
+
 
 class AboutWindow(Gtk.Window):
 
@@ -17,7 +19,7 @@ class AboutWindow(Gtk.Window):
         about = Gtk.AboutDialog()
         about.set_program_name('News_Indicator')
         about.set_comments(COMMENT)
-        # about.set_logo(put icon here) # TODO-me:Here
+        #about.set_logo(put logo here) #TODO-me: Set logo here
         about.run()
         about.destroy()
 
@@ -75,11 +77,10 @@ class Settings(Gtk.Window):
 
         # Create the main combo-box
         combo = Gtk.ComboBoxText()
-        combo.insert(0, "0", "10 Mins")  
-        combo.insert(1, "1", "15 Mins")
-        combo.insert(2, "2", "20 Mins")
-        combo.insert(3, "3", "30 Mins")
-        combo.insert(4, "4", "60 Mins")
+        # and populate it
+        for key, value in INTERVALS.iteritems():
+            combo.insert(key, str(key), value)
+
         # Default retrieval time is 10 mins
         combo.set_active(self.interval)
         combo.connect('changed', self.on_interval_change, state)
@@ -104,19 +105,13 @@ class Settings(Gtk.Window):
     def on_interval_change(self, combo, state):
         self.settings_called = True
         state.intrvl_change_trig = True
-        print('Settings changed and value is:{}'.format(self.settings_called))
-        # model = combo.get_model()
         index = combo.get_active_text()
         active = combo.get_active()
-        print('Model is:')
-        print (active)
         if index:
+            # Set the new interval
             combo.set_active(active)
             # Get the number of minutes
-            print('Number of minutes selected:')
-            print index[:2]
             self.interval = active
-            state.settings_interval = index[:2]
         return self.interval
 
     def on_notification_change(self, switch, state):
@@ -150,11 +145,6 @@ class SettingsState(object):
         self.settings_interval = settings_interval
 
     def get_state(self):
-        print ('Interval state now is: {}'.format(self.intrvl_change_trig))
-        print ('Interval now is: {}'.format(self.settings_interval))
-        print ('Notifications state now is: {}'.format(self.notification_change_trig))
-        print ('Notifications are now: {}'.format(self.notification_state))
-
         return self.intrvl_change_trig, self.settings_interval, self.notification_change_trig, self.notification_state
 
     def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
@@ -171,7 +161,6 @@ def render_settings_window(s_called, s_int, ntfc_called, ntfc_state, s_state):
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()
-    print ('in render_settings_window.called is{a} and interval is{b}'.format(a=win.settings_called, b=win.interval))
     return win.settings_called, win.interval, win.notifications_called, win.notifications_state
 
 

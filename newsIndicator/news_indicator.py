@@ -1,4 +1,4 @@
-import os
+import sys
 import signal
 import logging
 import webbrowser
@@ -7,19 +7,17 @@ from datetime import datetime
 
 import gi
 
-import about_and_settings_wins
-
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
-import notify2
+#import notify2   #TODO-me: Implement notifications
 from gi.repository import Gtk, AppIndicator3, GObject
 from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED
 
 from get_news import DownloadNewsWorker
 from utils import get_asset
-from about_and_settings_wins import SettingsState
+from about_and_settings_wins import SettingsState, render_settings_window, render_about_window, INTERVALS
 
 APP = 'News-Indicator'
 JOB_ID = 'news_job'
@@ -54,25 +52,28 @@ class NewsIndicator(object):
             if not webbrowser.open_new_tab(url):
                 raise webbrowser.Error
         except webbrowser.Error:
-            print('Unable to open a web browser, try accessing this URL manually instead:\n{0}').format(url)
+            print('Unable to open a web browser, try accessing this URL manually instead:\n{0}'.format(url))
 
     @staticmethod
     def stop(self):
-        Gtk.main_quit()  #TODO-me: scheduler.shutdown(wait=False) gia na kleisei o scheduler kai meta quit = sys.exit(1)
+        scheduler.shutdown(wait=False)
+        Gtk.main_quit()
+        sys.exit(1)
 
     @staticmethod
     def on_about(self):
-        about_and_settings_wins.render_about_window()
+        render_about_window()
 
     @staticmethod
     def on_settings(self):
-        selected_status, selected_interval, ntfc_status, ntfc_state = settings_state.get_state()
-        settings_changed, update_interval, ntfc_changed, ntfc_selected = about_and_settings_wins.render_settings_window\
-            (selected_status, selected_interval, ntfc_status,  ntfc_state, settings_state)
+        status, interval, ntfc_status, ntfc_state = settings_state.get_state()
+        settings_changed, update_interval, ntfc_changed, ntfc_selected = render_settings_window(
+                status, interval, ntfc_status,  ntfc_state, settings_state)
 
         settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
+
         if settings_state.intrvl_change_trig:
-            modify_scheduler(JOB_ID, int(settings_state.settings_interval))
+            modify_scheduler(JOB_ID, settings_state.settings_interval)
 
     def create_and_update_menu(self, list_of_news):
         print('in create menu is None')
@@ -139,10 +140,8 @@ def listen_for_new_updates(event):
 
 
 def modify_scheduler(job_id, new_interval):
-    print ('Modified job')
-    print('In modify_scheduler, id is:{}'.format(job_id))
-    print ('In modify_scheduler, interv is:{}'.format(new_interval))
-    scheduler.reschedule_job(job_id, trigger='interval', minutes=new_interval)
+    minutes = INTERVALS[new_interval][:2]
+    scheduler.reschedule_job(job_id, trigger='interval', minutes=int(minutes))
 
 
 if __name__ == '__main__':

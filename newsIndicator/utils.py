@@ -11,11 +11,9 @@ def get_asset(asset='sources'):
     absolute_path = os.path.dirname(os.path.abspath(__file__))
 
     if asset is not 'sources':
-        source_file = os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
-    else:
-        source_file = os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
+        return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
 
-    return source_file
+    return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
 
 
 def get_news_sources_from_file():
@@ -36,3 +34,4 @@ def delete_redundant_items(json_news, keys_to_del):
         del json_news[item]
 
     return json_news
+
