@@ -88,16 +88,6 @@ class Settings(Gtk.Window):
 
         listbox.add(row)
 
-        # Create the apply & select buttons and place them on the lower right corner
-        self.fixed = Gtk.Fixed()
-        listbox.add(self.fixed)
-        self.fixed.show()
-        finish_button = Gtk.Button("Finish")
-        self.fixed.put(finish_button, 200, 95)
-
-        # add event listeners for each button
-        finish_button.connect('activate', self.on_finish)
-
     def on_interval_change(self, combo, state):
         self.settings_called = True
         state.intrvl_change_trig = True
@@ -119,9 +109,6 @@ class Settings(Gtk.Window):
         self.notifications_state = state
 
         return self.notifications_state
-
-    def on_finish(self):
-        pass
 
     def __repr__(self):
         return self.get_title()
