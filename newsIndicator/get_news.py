@@ -83,7 +83,7 @@ class DownloadNewsWorker(object):
 
         news_sources = get_news_sources_from_file()
         # Put each news source into the queue
-        for _, val in news_sources.iteritems():
+        for _, val in news_sources.items():
             news_item = '='.join([val, API_KEY])
             input_queue.put(news_item)
 

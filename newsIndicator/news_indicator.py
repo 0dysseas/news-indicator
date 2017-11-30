@@ -3,14 +3,14 @@ import signal
 import logging
 import webbrowser
 from Queue import Queue
-from datetime import datetime
+from datetime import datetime, time
 
 import gi
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
-#import notify2   #TODO-me: Implement notifications
+import notify2
 from gi.repository import Gtk, AppIndicator3, GObject
 from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED
@@ -21,6 +21,7 @@ from about_and_settings_wins import SettingsState, render_settings_window, rende
 
 APP = 'News-Indicator'
 JOB_ID = 'news_job'
+ICON = get_asset(asset='icon')
 
 try:
     scheduler = BlockingScheduler()
@@ -34,9 +35,7 @@ class NewsIndicator(object):
     menu = None
     update_interval = 10
 
-    icon = get_asset(asset='icon')
-
-    indicator = AppIndicator3.Indicator.new(APP, icon, AppIndicator3.IndicatorCategory.OTHER)
+    indicator = AppIndicator3.Indicator.new(APP, ICON, AppIndicator3.IndicatorCategory.OTHER)
     indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
     def __init__(self):
@@ -68,7 +67,7 @@ class NewsIndicator(object):
     def on_settings(self):
         status, interval, ntfc_status, ntfc_state = settings_state.get_state()
         settings_changed, update_interval, ntfc_changed, ntfc_selected = render_settings_window(
-                status, interval, ntfc_status,  ntfc_state, settings_state)
+            status, interval, ntfc_status, ntfc_state, settings_state)
 
         settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
 
@@ -76,7 +75,6 @@ class NewsIndicator(object):
             modify_scheduler(JOB_ID, settings_state.settings_interval)
 
     def create_and_update_menu(self, list_of_news):
-        print('in create menu is None')
         self.create_menu(list_of_news)
 
     def create_menu(self, menu_items):
@@ -102,21 +100,48 @@ class NewsIndicator(object):
         about_item.connect('activate', self.on_about)
         self.menu.append(about_item)
 
-        # quit item
-        quit_item = Gtk.MenuItem('Quit')
-        quit_item.connect('activate', self.stop)
-        self.menu.append(quit_item)
+        # exit item
+        exit_item = Gtk.MenuItem('Exit')
+        exit_item.connect('activate', self.stop)
+        self.menu.append(exit_item)
 
         self.menu.show_all()
         self.indicator.set_menu(self.menu)
-        self.indicator.set_label('News', APP)
 
         return self.menu
 
 
+# Show the notification pop-up window
+def show_notifications(run_time):
+    # Initialize the d-bus connection and create the notification object
+    notify2.init("News Indicator")
+    n = notify2.Notification(None, icon=ICON)
+
+    # Set the urgency level and the timeout
+    n.set_urgency(notify2.URGENCY_NORMAL)
+    n.set_timeout(10000)
+    formatted_time = run_time.time().strftime('%H:%M')
+    message = 'Your {} news are here!'.format(formatted_time)
+
+    n.update('News Indicator', message=message, icon=ICON)
+    n.show()
+
+
+# Listener that's triggered every time a job is executed
+def listen_for_new_updates(event):
+    if event.retval:
+        news_indicator.create_and_update_menu(event.retval)
+        show_notifications(event.scheduled_run_time)
+        Gtk.main()
+
+
+def modify_scheduler(job_id, new_interval):
+    minutes = INTERVALS[new_interval][:2]
+    scheduler.reschedule_job(job_id, trigger='interval', minutes=int(minutes))
+
+
 @scheduler.scheduled_job('interval', next_run_time=datetime.now(), minutes=10, id=JOB_ID, name='retrieve_news_job')
 def main():
-
     output_queue = Queue()
 
     out_list = list()
@@ -126,22 +151,10 @@ def main():
     download.retrieve_news()
 
     while not output_queue.empty():
-        item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.FInd a better way..
+        item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.Find a better way..
         out_list.append(item)
 
     return out_list
-
-
-# Listener that's triggered when each job is executed
-def listen_for_new_updates(event):
-    if event.retval:
-        news_indicator.create_and_update_menu(event.retval)
-        Gtk.main()
-
-
-def modify_scheduler(job_id, new_interval):
-    minutes = INTERVALS[new_interval][:2]
-    scheduler.reschedule_job(job_id, trigger='interval', minutes=int(minutes))
 
 
 if __name__ == '__main__':
@@ -151,5 +164,3 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     scheduler.start()
-
-

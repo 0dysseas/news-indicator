@@ -92,14 +92,11 @@ class Settings(Gtk.Window):
         self.fixed = Gtk.Fixed()
         listbox.add(self.fixed)
         self.fixed.show()
-        apply_button = Gtk.Button("Apply")
-        cancel_button = Gtk.Button("Cancel")
-        self.fixed.put(apply_button, 140, 95)
-        self.fixed.put(cancel_button, 200, 95)
+        finish_button = Gtk.Button("Finish")
+        self.fixed.put(finish_button, 200, 95)
 
         # add event listeners for each button
-        apply_button.connect('activate', self.on_apply)
-        cancel_button.connect('activate', self.on_cancel)
+        finish_button.connect('activate', self.on_finish)
 
     def on_interval_change(self, combo, state):
         self.settings_called = True
@@ -123,10 +120,7 @@ class Settings(Gtk.Window):
 
         return self.notifications_state
 
-    def on_apply(self):
-        pass
-
-    def on_cancel(self):
+    def on_finish(self):
         pass
 
     def __repr__(self):
