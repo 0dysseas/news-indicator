@@ -77,7 +77,7 @@ class Settings(Gtk.Window):
         # Create the main combo-box
         combo = Gtk.ComboBoxText()
         # and populate it
-        for key, value in INTERVALS.iteritems():
+        for key, value in INTERVALS.items():
             combo.insert(key, str(key), value)
 
         # Default retrieval time is 10 mins
