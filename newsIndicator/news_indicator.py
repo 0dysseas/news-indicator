@@ -170,6 +170,10 @@ def modify_scheduler(job_id, new_interval):
 
 @scheduler.scheduled_job('interval', next_run_time=datetime.now(), minutes=10, id=JOB_ID, name='retrieve_news_job')
 def main():
+    """
+    Main function used to retrieve the news from the sources, based on a defined time interval
+
+    """
     output_queue = Queue()
 
     out_list = list()

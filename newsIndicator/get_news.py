@@ -29,6 +29,9 @@ except KeyError:
 
 
 class DownloadWorker(Thread):
+    """
+    Main class that retrieves the actual articles from the corresponding urls, in a multi-threaded way.
+    """
 
     def __init__(self, input_queue, out_queue):
         Thread.__init__(self, target=self.download_content)
@@ -63,6 +66,9 @@ class DownloadWorker(Thread):
 
 
 class DownloadNewsWorker(object):
+    """
+    Class used to get the news from the sources file and then put them in the input queue
+    """
 
     def __init__(self, output_queue):
         self.output_queue = output_queue
