@@ -31,6 +31,10 @@ except ImportError:
 
 
 class NewsIndicator(object):
+    """
+    The main Indicator class
+    """
+
     # Class variables to be shared among all NewsIndicator instances
     menu = None
     update_interval = 10
@@ -47,6 +51,10 @@ class NewsIndicator(object):
 
     @staticmethod
     def open_news_url(self, url):
+        """
+        Opens the selected url in the default browser
+        """
+
         try:
             if not webbrowser.open_new_tab(url):
                 raise webbrowser.Error
@@ -61,13 +69,23 @@ class NewsIndicator(object):
 
     @staticmethod
     def on_about(self):
+        """
+        Callback function for the about menu item
+        """
         render_about_window()
 
     @staticmethod
     def on_settings(self):
+        """
+        Callback function for the settings menu item. Retrieves the app state, notifications state & the interval
+        selected by the user, and updates accordingly the SettingsState class.
+        """
+
         status, interval, ntfc_status, ntfc_state = settings_state.get_state()
         settings_changed, update_interval, ntfc_changed, ntfc_selected = render_settings_window(
             status, interval, ntfc_status, ntfc_state, settings_state)
+
+
 
         settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
 
@@ -111,8 +129,10 @@ class NewsIndicator(object):
         return self.menu
 
 
-# Show the notification pop-up window
 def show_notifications(run_time):
+    """
+    Show the notification pop-up window
+    """
     # Initialize the d-bus connection and create the notification object
     notify2.init("News Indicator")
     n = notify2.Notification(None, icon=ICON)
@@ -127,8 +147,12 @@ def show_notifications(run_time):
     n.show()
 
 
-# Listener that's triggered every time a job is executed
 def listen_for_new_updates(event):
+    """
+    Listener that's triggered every time a successful job(news retrieval) is executed.
+    Upon its call it creates and renders the main indicator menu."
+    """
+
     if event.retval:
         news_indicator.create_and_update_menu(event.retval)
         show_notifications(event.scheduled_run_time)
@@ -136,6 +160,10 @@ def listen_for_new_updates(event):
 
 
 def modify_scheduler(job_id, new_interval):
+    """
+    Modifies the scheduler object in order to retrieve the news based on the new interval, as selected by the
+    user in the indicator settings.
+    """
     minutes = INTERVALS[new_interval][:2]
     scheduler.reschedule_job(job_id, trigger='interval', minutes=int(minutes))
 

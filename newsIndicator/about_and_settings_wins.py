@@ -115,6 +115,9 @@ class Settings(Gtk.Window):
 
 
 class SettingsState(object):
+    """
+    Singleton class that holds the current state of the app (notifications & retrieval interval)
+    """
 
     def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
         # Notification switch state variables
