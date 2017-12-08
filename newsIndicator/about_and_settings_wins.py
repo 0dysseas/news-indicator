@@ -16,6 +16,7 @@ class AboutWindow(Gtk.Window):
     """
     About window
     """
+
     def __init__(self):
         super(AboutWindow, self).__init__()
         about = Gtk.AboutDialog()
@@ -26,12 +27,40 @@ class AboutWindow(Gtk.Window):
 
     def __repr__(self):
         return self.get_title()
-    
+
+
+class SettingsState(object):
+    """
+    Subject class,based on the Observer pattern, that holds the current state of the app.
+    It models the independent functionality (notifications & retrieval interval)
+    """
+
+    def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
+        # Notification switch state variables
+        self.notification_change_trig = ntfc_change_trig
+        self.notification_state = notification_state
+        # Interval dd menu state variables
+        self.intrvl_change_trig = intrvl_change_trig
+        self.settings_interval = settings_interval
+
+    def get_state(self):
+        return self.intrvl_change_trig, self.settings_interval, self.notification_change_trig, self.notification_state
+
+    def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
+        # Update notification switch state
+        self.notification_change_trig = new_ntfc_instance_trig
+        self.notification_state = new_ntfc_change
+        # Update interval option
+        self.intrvl_change_trig = new_settings_instance_trig
+        self.settings_interval = new_interval
+
 
 class Settings(Gtk.Window):
     """
-    Settings window
+    Observer class,based on the Observer pattern, that renders the settings window.
+    It is coupled to the subject SettingsState class and holds the dependent functionality (scheduler).
     """
+
     def __init__(self, called, interv, ntfc_called, ntfc_state, state):
         # Store the state of the whole Settings window
         self.settings_called = called
@@ -107,6 +136,7 @@ class Settings(Gtk.Window):
             self.interval = active
         return self.interval
 
+    @staticmethod
     def on_notification_change(self, switch, state):
         """
         Callback function that is fired upon changing the notification state (ON/OFF)
@@ -115,7 +145,7 @@ class Settings(Gtk.Window):
         self.notifications_called = True
         state.notification_change_trig = True
 
-        state = switch.get_state()
+        state = self.switch.get_state()
         switch.set_state(state)
         self.notifications_state = state
 
@@ -123,31 +153,6 @@ class Settings(Gtk.Window):
 
     def __repr__(self):
         return self.get_title()
-
-
-class SettingsState(object):
-    """
-    Singleton class that holds the current state of the app (notifications & retrieval interval)
-    """
-
-    def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
-        # Notification switch state variables
-        self.notification_change_trig = ntfc_change_trig
-        self.notification_state = notification_state
-        # Interval dd menu state variables
-        self.intrvl_change_trig = intrvl_change_trig
-        self.settings_interval = settings_interval
-
-    def get_state(self):
-        return self.intrvl_change_trig, self.settings_interval, self.notification_change_trig, self.notification_state
-
-    def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
-        # Update notification switch state
-        self.notification_change_trig = new_ntfc_instance_trig
-        self.notification_state = new_ntfc_change
-        # Update interval option
-        self.intrvl_change_trig = new_settings_instance_trig
-        self.settings_interval = new_interval
 
 
 def render_settings_window(s_called, s_int, ntfc_called, ntfc_state, s_state):
