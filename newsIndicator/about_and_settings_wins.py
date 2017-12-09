@@ -31,7 +31,7 @@ class AboutWindow(Gtk.Window):
 
 class SettingsState(object):
     """
-    Subject class,based on the Observer pattern, that holds the current state of the app.
+    Observable class,based on the Observer pattern, that holds the current state of the app.
     It models the independent functionality (notifications & retrieval interval)
     """
 

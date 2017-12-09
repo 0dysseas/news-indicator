@@ -77,16 +77,13 @@ class NewsIndicator(object):
     @staticmethod
     def on_settings(self):
         """
-        Callback function for the settings menu item. Retrieves the app state, notifications state & the interval
+        Callback function for the settings menu item. Pulls the app state, notifications state & the interval
         selected by the user, and updates accordingly the SettingsState class.
         """
 
         status, interval, ntfc_status, ntfc_state = settings_state.get_state()
         settings_changed, update_interval, ntfc_changed, ntfc_selected = render_settings_window(
             status, interval, ntfc_status, ntfc_state, settings_state)
-
-
-
         settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
 
         if settings_state.intrvl_change_trig:
