@@ -31,8 +31,9 @@ class AboutWindow(Gtk.Window):
 
 class SettingsState(object):
     """
-    Observable class,based on the Observer pattern, that holds the current state of the app.
-    It models the independent functionality (notifications & retrieval interval)
+    Observer A. Based on the Observer pattern it is responsible to hold the current state of the app.
+    It models the dependent functionality (notifications & retrieval interval) and is used as a relay to the other
+    observer too.
     """
 
     def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
@@ -57,8 +58,8 @@ class SettingsState(object):
 
 class Settings(Gtk.Window):
     """
-    Observer class,based on the Observer pattern, that renders the settings window.
-    It is coupled to the subject SettingsState class and holds the dependent functionality (scheduler).
+    Observable class,based on the Observer pattern, that renders the settings window.
+    It is coupled to the SettingsState class and holds the independent functionality (scheduler).
     """
 
     def __init__(self, called, interv, ntfc_called, ntfc_state, state):
@@ -94,9 +95,9 @@ class Settings(Gtk.Window):
         # and its switch
         switch = Gtk.Switch()
         switch.props.valign = Gtk.Align.CENTER
-        # Default notifications state is OFF
+        # Default notifications state is ON
         switch.set_active(self.notifications_state)
-        switch.connect('state-set', self.on_notification_change, state)
+        switch.connect('notify::active', self.on_notification_change)
         horizontal_box.pack_start(switch, False, True, 0)
 
         listbox.add(row)
@@ -136,16 +137,14 @@ class Settings(Gtk.Window):
             self.interval = active
         return self.interval
 
-    @staticmethod
-    def on_notification_change(self, switch, state):
+    def on_notification_change(self, switch, active):
         """
         Callback function that is fired upon changing the notification state (ON/OFF)
 
         """
         self.notifications_called = True
-        state.notification_change_trig = True
 
-        state = self.switch.get_state()
+        state = switch.get_state()
         switch.set_state(state)
         self.notifications_state = state
 

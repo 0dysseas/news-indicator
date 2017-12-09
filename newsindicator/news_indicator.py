@@ -3,7 +3,7 @@ import signal
 import logging
 import webbrowser
 from Queue import Queue
-from datetime import datetime, time
+from datetime import datetime
 
 import gi
 
@@ -19,6 +19,7 @@ from get_news import DownloadNewsWorker
 from utils import get_asset
 from about_and_settings_wins import SettingsState, render_settings_window, render_about_window, INTERVALS
 
+# Constants
 APP = 'News-Indicator'
 JOB_ID = 'news_job'
 ICON = get_asset(asset='icon')
@@ -32,12 +33,14 @@ except ImportError:
 
 class NewsIndicator(object):
     """
-    The main Indicator class
+    The main Indicator class. It's the Observer B in the Observer pattern and changes state (notifications, interval)
+    based on the Observable's behavior.
     """
 
     # Class variables to be shared among all NewsIndicator instances
     menu = None
     update_interval = 10
+    notifications = True
 
     indicator = AppIndicator3.Indicator.new(APP, ICON, AppIndicator3.IndicatorCategory.OTHER)
     indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
@@ -81,13 +84,23 @@ class NewsIndicator(object):
         selected by the user, and updates accordingly the SettingsState class.
         """
 
+        # Pull the current app state from the relay Observer object
         status, interval, ntfc_status, ntfc_state = settings_state.get_state()
+
+        # Pass it to the Observable object in order to render the Settings window
         settings_changed, update_interval, ntfc_changed, ntfc_selected = render_settings_window(
             status, interval, ntfc_status, ntfc_state, settings_state)
+
+        # Register any state changes
         settings_state.update_state(settings_changed, update_interval, ntfc_changed, ntfc_selected)
 
+        # If the interval has changed, reprogram scheduler to run at the new interval
         if settings_state.intrvl_change_trig:
             modify_scheduler(JOB_ID, settings_state.settings_interval)
+
+        if settings_state.notification_change_trig:
+            print ('Notification changed {a} and selected {b}'.format(a=settings_state.notification_change_trig, b=settings_state.notification_state))
+            NewsIndicator.notifications = False if not settings_state.notification_state else True
 
     def create_and_update_menu(self, list_of_news):
         self.create_menu(list_of_news)
@@ -152,7 +165,8 @@ def listen_for_new_updates(event):
 
     if event.retval:
         news_indicator.create_and_update_menu(event.retval)
-        show_notifications(event.scheduled_run_time)
+        if NewsIndicator.notifications:
+            show_notifications(event.scheduled_run_time)
         Gtk.main()
 
 
@@ -180,7 +194,7 @@ def main():
     download.retrieve_news()
 
     while not output_queue.empty():
-        item = output_queue.get()  # Using output queue and then feed that into a list??? That's dummmy.Find a better way..
+        item = output_queue.get()  
         out_list.append(item)
 
     return out_list
@@ -188,8 +202,8 @@ def main():
 
 if __name__ == '__main__':
     news_indicator = NewsIndicator()
-    # Init the default newsIndicator settings state to: news retrieval per 10' & notifications OFF
-    settings_state = SettingsState(False, 0, False, False)
+    # Init the default newsindicator settings state to: news retrieval per 10' & notifications True
+    settings_state = SettingsState(False, 0, False, True)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     scheduler.start()

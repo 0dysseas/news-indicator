@@ -13,15 +13,13 @@ import requests
 
 from utils import get_news_sources_from_file, delete_redundant_items
 
-# TODO-me: Split news and sports sources? Use beautifulsoup for greek sites
-
 # TODO-me: Check  importing the modules if it is python2 or python3.
 
 NUM_THREADS = 8
 
 logging.basicConfig(level=logging.INFO)
 
-try:  # TODO-me: Refactor the two try clauses
+try:
     API_KEY = str(os.environ.get('NEWS_API_KEY'))
 except KeyError:
     print ('Please save your personal NewsAPI key in a "NEWS_API_KEY" env variable.')
@@ -43,9 +41,8 @@ class DownloadWorker(Thread):
 
     def _form_news_structure(self, json_news):
         keys_to_remove = ['status', 'sortBy']
-        sub_keys_to_remove = ['description', 'author', 'publishedAt']  # TODO-me: Handle the National Geographic case
+        sub_keys_to_remove = ['description', 'author', 'publishedAt']
 
-        # TODO-me: Optimize below code!
         filtered_news_sources_format = delete_redundant_items(json_news, keys_to_remove)
 
         # Get the first four articles from each source
