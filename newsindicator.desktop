@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=News Application Indicator
+Comment=Download and show the latest news
+Exec=newsindicator
+Icon=/usr/share/newsindicator/assets/news_icon.png
+Type=Application
+Terminal=false
+Categories=GNOME;GTK;Utility;

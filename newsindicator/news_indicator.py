@@ -24,6 +24,7 @@ APP = 'News-Indicator'
 JOB_ID = 'news_job'
 ICON = get_asset(asset='icon')
 
+
 try:
     scheduler = BlockingScheduler()
 except ImportError:
@@ -99,7 +100,6 @@ class NewsIndicator(object):
             modify_scheduler(JOB_ID, settings_state.settings_interval)
 
         if settings_state.notification_change_trig:
-            print ('Notification changed {a} and selected {b}'.format(a=settings_state.notification_change_trig, b=settings_state.notification_state))
             NewsIndicator.notifications = False if not settings_state.notification_state else True
 
     def create_and_update_menu(self, list_of_news):
@@ -200,10 +200,22 @@ def main():
     return out_list
 
 
-if __name__ == '__main__':
+def run_indicator():
+    global news_indicator
+    global settings_state
     news_indicator = NewsIndicator()
     # Init the default newsindicator settings state to: news retrieval per 10' & notifications True
     settings_state = SettingsState(False, 0, False, True)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
     scheduler.start()
+
+
+if __name__ == '__main__':
+    # news_indicator = NewsIndicator()
+    # # Init the default newsindicator settings state to: news retrieval per 10' & notifications True
+    # settings_state = SettingsState(False, 0, False, True)
+    # signal.signal(signal.SIGINT, signal.SIG_DFL)
+    # scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
+    # scheduler.start()
+    run_indicator()

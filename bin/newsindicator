@@ -1,0 +1,12 @@
+#!/usr/bin/python
+
+import sys
+from os.path import abspath, dirname, join
+
+try:
+    import newsindicator
+except ImportError:
+    sys.path.append(abspath(join(dirname(__file__), '..')))
+
+from newsindicator import news_indicator
+indicator.main()
