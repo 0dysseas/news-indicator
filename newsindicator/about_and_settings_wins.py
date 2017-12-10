@@ -5,14 +5,14 @@ gi.require_version('AppIndicator3', '0.1')
 
 from gi.repository import Gtk
 
-COMMENT = 'News_Indicator is an appindicator that retrieves the latest news articles,' \
+COMMENT = 'News Indicator is an appindicator that retrieves the latest news articles,' \
           ' on a variety of topics from top media outlets.\n\n\nBuilt with Python and powered by NewsAPI.'
 
 # News retrieval intervals
 INTERVALS = {0: '10 Minutes', 1: '15 Minutes', 2: '20 Minutes', 3: '30 Minutes', 4: '60 Minutes'}
 
 
-class AboutWindow(Gtk.Window):
+class AboutWindow(Gtk.Dialog):
     """
     About window
     """
@@ -20,10 +20,15 @@ class AboutWindow(Gtk.Window):
     def __init__(self):
         super(AboutWindow, self).__init__()
         about = Gtk.AboutDialog()
-        about.set_program_name('News_Indicator')
+        about.set_program_name('News Indicator')
+        about.set_logo_icon_name(None)
         about.set_comments(COMMENT)
-        about.run()
-        about.destroy()
+        about.set_title('')
+        about.connect('response', self.on_close)
+        about.show()
+
+    def on_close(self, action, parameter):
+        action.destroy()
 
     def __repr__(self):
         return self.get_title()
@@ -56,7 +61,7 @@ class SettingsState(object):
         self.settings_interval = new_interval
 
 
-class Settings(Gtk.Window):
+class Settings(Gtk.ApplicationWindow):
     """
     Observable class,based on the Observer pattern, that renders the settings window.
     It is coupled to the SettingsState class and holds the independent functionality (scheduler).
