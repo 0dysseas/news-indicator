@@ -1,7 +1,8 @@
 # Application Indicator for Ubuntu Unity / Gnome / Xfce
 
 Application Indicator (system tray icon) that accesses, retrieves and displays the latest news from top media outlets.
-New sources and blogs can be found/updated at the /assets/news_sources.txt file.
+
+News sources and blogs can be found/updated at the /assets/news_sources.txt file.
 
 # Usage
 
