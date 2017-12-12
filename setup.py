@@ -9,12 +9,6 @@ NAME = 'newsindicator'
 DESCRIPTION = 'Linux app indicator that retrieves news from top media outlets'
 URL = 'https://github.com/0dysseas/news-indicator'
 
-# Load the package's __version__.py module as a dictionary.
-about = {}
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, NAME, '__version__.py')) as f:
-    exec(f.read(), about)
-
 
 def find_resources(resource_dir):
     target_path = os.path.join('/usr/share/newsindicator', resource_dir)
@@ -24,7 +18,7 @@ def find_resources(resource_dir):
 
 
 setup(name=NAME,
-      version=about['__version__'],
+      version='1.0.0',
       description=DESCRIPTION,
       url=URL,
       license='GNU Lesser General Public License v3.0',
