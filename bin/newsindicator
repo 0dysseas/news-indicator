@@ -9,4 +9,4 @@ except ImportError:
     sys.path.append(abspath(join(dirname(__file__), '..')))
 
 from newsindicator import news_indicator
-indicator.main()
+indicator.run_indicator()
