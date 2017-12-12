@@ -1,2 +1,2 @@
 include README.md LICENCE requirements.txt
-recursive-include assets *
+

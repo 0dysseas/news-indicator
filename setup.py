@@ -29,6 +29,9 @@ setup(name=NAME,
           ('/usr/share/applications', ['newsindicator.desktop']),
           # find_resources('assets')],
           ],
-      include_package_data=True,
+      package_data={
+          # If any package contains *.txt or *.rst files, include them:
+          '': ['*.png', '*.txt']
+      },
       scripts=['bin/newsindicator']
 )
