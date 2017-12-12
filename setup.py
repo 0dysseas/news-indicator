@@ -11,6 +11,7 @@ URL = 'https://github.com/0dysseas/news-indicator'
 
 # Load the package's __version__.py module as a dictionary.
 about = {}
+here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, NAME, '__version__.py')) as f:
     exec(f.read(), about)
 
