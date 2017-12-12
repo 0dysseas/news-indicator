@@ -9,14 +9,10 @@ def print_json_object(obj):
 
 def get_asset(asset='sources'):
     absolute_path = os.path.dirname(os.path.abspath(__file__))
-    print 'get_asset'
-    print absolute_path
 
     if asset is not 'sources':
-        print os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
         return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
-    print 'finished get_asset'
-    print os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
+
     return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
 
 

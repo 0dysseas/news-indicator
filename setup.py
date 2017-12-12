@@ -3,6 +3,7 @@
 import os
 
 from distutils.core import setup
+from distutils import sysconfig
 
 # Package meta-data.
 NAME = 'newsindicator'
@@ -11,7 +12,8 @@ URL = 'https://github.com/0dysseas/news-indicator'
 
 
 def find_resources(resource_dir):
-    target_path = os.path.join('/usr/share/newsindicator', resource_dir)
+    dist_package_path = sysconfig.get_python_lib()
+    target_path = os.path.join(dist_package_path, NAME, resource_dir)
     resource_names = os.listdir(resource_dir)
     resource_list = [os.path.join(resource_dir, file_name) for file_name in resource_names]
     return target_path, resource_list
