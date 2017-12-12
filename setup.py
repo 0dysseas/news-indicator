@@ -5,7 +5,7 @@ import os
 from distutils.core import setup
 
 # Package meta-data.
-NAME = 'News Indicator'
+NAME = 'newsindicator'
 DESCRIPTION = 'Linux app indicator that retrieves news from top media outlets'
 URL = 'https://github.com/0dysseas/news-indicator'
 
