@@ -24,11 +24,10 @@ APP = 'News-Indicator'
 JOB_ID = 'news_job'
 ICON = get_asset(asset='icon')
 
-
 try:
     scheduler = BlockingScheduler()
 except ImportError:
-    print ('Failed to import Scheduler')
+    raise ImportError('Failed to import Scheduler')
     sys.exit(1)
 
 
@@ -212,10 +211,4 @@ def run_indicator():
 
 
 if __name__ == '__main__':
-    # news_indicator = NewsIndicator()
-    # # Init the default newsindicator settings state to: news retrieval per 10' & notifications True
-    # settings_state = SettingsState(False, 0, False, True)
-    # signal.signal(signal.SIGINT, signal.SIG_DFL)
-    # scheduler.add_listener(listen_for_new_updates, EVENT_JOB_EXECUTED)
-    # scheduler.start()
     run_indicator()

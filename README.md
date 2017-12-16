@@ -9,8 +9,9 @@ News sources and blogs can be found/updated at the /assets/news_sources.txt file
 **Install**:
 
     - Grab a NewsAPI key from https://newsapi.org/
-    - Save it in an environmental variable called NEWS_API_KEY
-    -
+    - Navigate to your ~/.profile file and add the key as follows: export NEWS_API_KEY="your_api_key"
+    - Log out and log back in, in order for the changes to take effect
+    - Run the "News Application Indicator" from your menu or system utilities.
 
 # Attributions
 

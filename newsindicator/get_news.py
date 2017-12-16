@@ -13,17 +13,9 @@ import requests
 
 from utils import get_news_sources_from_file, delete_redundant_items
 
-# TODO-me: Check  importing the modules if it is python2 or python3.
-
 NUM_THREADS = 8
 
 logging.basicConfig(level=logging.INFO)
-
-try:
-    API_KEY = str(os.environ.get('NEWS_API_KEY'))
-except KeyError:
-    print ('Please save your personal NewsAPI key in a "NEWS_API_KEY" env variable.')
-    sys.exit(1)
 
 
 class DownloadWorker(Thread):
@@ -74,6 +66,13 @@ class DownloadNewsWorker(object):
         return self.output_queue
 
     def retrieve_news(self):
+        try:
+            # api_key = str(os.environ.get('NEWS_API_KEY'))
+            api_key = os.environ['NEWS_API_KEY']
+        except KeyError:
+            print ('Please save your personal NewsAPI key in a "NEWS_API_KEY" env variable.')
+            sys.exit(1)
+
         # Create an input_queue to store all API endpoints
         input_queue = Queue()
 
@@ -87,7 +86,7 @@ class DownloadNewsWorker(object):
         news_sources = get_news_sources_from_file()
         # Put each news source into the queue
         for _, val in news_sources.items():
-            news_item = '='.join([val, API_KEY])
+            news_item = '='.join([val, api_key])
             input_queue.put(news_item)
 
         input_queue.join()

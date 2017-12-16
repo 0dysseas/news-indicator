@@ -11,9 +11,9 @@ def get_asset(asset='sources'):
     absolute_path = os.path.dirname(os.path.abspath(__file__))
 
     if asset is not 'sources':
-        return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_icon.png'))
+        return os.path.join(absolute_path, 'assets/news_icon.png')
 
-    return os.path.abspath(os.path.join(absolute_path, '..', 'assets/news_sources.txt'))
+    return os.path.join(absolute_path, 'assets/news_sources.txt')
 
 
 def get_news_sources_from_file():
