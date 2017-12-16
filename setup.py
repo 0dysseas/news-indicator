@@ -27,6 +27,7 @@ setup(name=NAME,
       packages=['newsindicator'],
       # package_dir={'newsindicator': 'newsindicator'},
       # package_data={'newsindicator': ['assets']},
+      include_package_data=True,
       data_files=[
           ('/usr/share/applications', ['newsindicator.desktop']),
           # find_resources('assets'),
