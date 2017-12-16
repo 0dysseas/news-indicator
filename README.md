@@ -11,7 +11,12 @@ News sources and blogs can be found/updated at the /assets/news_sources.txt file
     - Grab a NewsAPI key from https://newsapi.org/
     - Navigate to your ~/.profile file and add the key as follows: export NEWS_API_KEY="your_api_key"
     - Log out and log back in, in order for the changes to take effect
+    - sudo pip install git+https://github.com/0dysseas/news-indicator.git
     - Run the "News Application Indicator" from your menu or system utilities.
+
+**Uninstall**:
+
+    - sudo pip uninstall newsindicator
 
 # Attributions
 
