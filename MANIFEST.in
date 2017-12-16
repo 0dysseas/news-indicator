@@ -1,2 +1,6 @@
-include README.md LICENCE requirements.txt
+graft assets
+
+include README.md
+include LICENCE
+
 
