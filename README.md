@@ -18,9 +18,6 @@ News sources and blogs can be found/updated at the /assets/news_sources.txt file
 
     - sudo pip uninstall newsindicator
 
-# Screenshots
-[![setr.png](https://s13.postimg.org/ix70n1kif/setr.png)](https://postimg.org/image/a266civpv/)
-
 # Attributions
 
 Powered by https://newsapi.org/
