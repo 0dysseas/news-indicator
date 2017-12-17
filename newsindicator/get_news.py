@@ -10,12 +10,30 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 
 import requests
+import notify2
 
 from utils import get_news_sources_from_file, delete_redundant_items
 
 NUM_THREADS = 8
+MESSAGE = ' NEWS_API_KEY not found!! \nHave you stored it in ~/.profile?'
 
 logging.basicConfig(level=logging.INFO)
+
+
+def show_alert_notifications():
+    """
+    Show the alert notification pop-up window
+    """
+    # Initialize the d-bus connection and create the notification object
+    notify2.init("News Indicator")
+    n = notify2.Notification(None)
+
+    # Set the urgency level and the timeout
+    n.set_urgency(notify2.URGENCY_NORMAL)
+    n.set_timeout(9000)
+
+    n.update('News Indicator', message=MESSAGE)
+    n.show()
 
 
 class DownloadWorker(Thread):
@@ -70,7 +88,7 @@ class DownloadNewsWorker(object):
             # api_key = str(os.environ.get('NEWS_API_KEY'))
             api_key = os.environ['NEWS_API_KEY']
         except KeyError:
-            print ('Please save your personal NewsAPI key in a "NEWS_API_KEY" env variable.')
+            show_alert_notifications()
             sys.exit(1)
 
         # Create an input_queue to store all API endpoints
