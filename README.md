@@ -26,7 +26,7 @@ Main features:
 
     - sudo pip uninstall newsindicator
 
-# Screenshots
+# Screenshots (Theme may vary based on your installed desktop theme. I'm using the Mint-Y-Dark)
 [![final_menu.png](https://s13.postimg.org/ylct75hnr/final_menu.png)](https://postimg.org/image/iacpau55v/)
 [![settings_mastered.png](https://s13.postimg.org/a9tt8lbp3/settings_mastered.png)](https://postimg.org/image/utyn72rg3/)
 
