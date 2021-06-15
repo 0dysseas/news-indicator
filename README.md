@@ -33,5 +33,5 @@ Main features:
 
 # Attributions
 
-Powered by https://newsapi.org/
+Powered by https://newsapi.org
 Icon made by Freepik from [www.flaticon.com](http://www.flaticon.com)
