@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=News Application Indicator
-Comment=Download and show the latest news
+Comment=Downloads and shows the latest news
 Exec=newsindicator
 Icon=/usr/share/icons/newsindicator_icon.png
 Type=Application
