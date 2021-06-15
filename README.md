@@ -2,7 +2,7 @@
 
 Application Indicator (system tray icon) that accesses, retrieves and displays the latest news from top media outlets.
 
-News sources and blogs can be found/updated at the /assets/news_sources.txt file.
+News sources and blogs can be found/updated at the `/assets/news_sources.txt file`.
 
 [![final_notification.png](https://s13.postimg.org/j15fgsfav/final_notification.png)](https://postimg.org/image/caoy7cs4z/)
 
