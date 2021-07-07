@@ -32,6 +32,7 @@ class AboutWindow(Gtk.Dialog):
         action.destroy()
 
     def __repr__(self):
+        # object representation
         return self.get_title()
 
 
