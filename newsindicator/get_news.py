@@ -42,6 +42,7 @@ class DownloadWorker(Thread):
     """
 
     def __init__(self, input_queue, out_queue):
+        # Init threads and queues
         Thread.__init__(self, target=self.download_content)
         self.input_queue = input_queue
         self.out_queue = out_queue
