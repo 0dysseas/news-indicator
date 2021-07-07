@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.3.0 (2021-07-07)
+### Feature
+* **cfg:** Remove build command ([`fa7dfbf`](https://github.com/0dysseas/news-indicator/commit/fa7dfbfabe9bba10083a81e6484bc26a73fcd1c0))
+
 ## v2.2.0 (2021-07-07)
 ### Feature
 * **window:** Add new feature in about window ([`fb8643d`](https://github.com/0dysseas/news-indicator/commit/fb8643dbd16d175a52910261dbec8ed1624e7930))
