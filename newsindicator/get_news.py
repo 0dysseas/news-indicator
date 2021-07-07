@@ -79,6 +79,7 @@ class DownloadNewsWorker(object):
     """
 
     def __init__(self, output_queue):
+        # Init output queue
         self.output_queue = output_queue
 
     def __repr__(self):
