@@ -1,3 +1,4 @@
 APScheduler>=3.3.1
 notify2>=0.3.1
+pre-commit
 requests>=2.18.4
