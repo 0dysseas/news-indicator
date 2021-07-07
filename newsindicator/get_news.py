@@ -86,6 +86,7 @@ class DownloadNewsWorker(object):
         return self.output_queue
 
     def retrieve_news(self):
+        # retrieves news
         try:
             # api_key = str(os.environ.get('NEWS_API_KEY'))
             api_key = os.environ['NEWS_API_KEY']
