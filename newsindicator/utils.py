@@ -33,6 +33,7 @@ def get_news_sources_from_file():
 
 
 def delete_redundant_items(json_news, keys_to_del):
+    #deletes redundant items
     for item in keys_to_del:
         del json_news[item]
 
