@@ -3,11 +3,13 @@ import os
 
 
 def print_json_object(obj):
+    # print helper
     print 'Printing JSON object'
     print (json.dumps(obj, indent=4))
 
 
 def get_asset(asset='sources'):
+    # gets the assets
     absolute_path = os.path.dirname(os.path.abspath(__file__))
 
     if asset is not 'sources':
@@ -17,6 +19,7 @@ def get_asset(asset='sources'):
 
 
 def get_news_sources_from_file():
+    #gets the news sources from the file
     source_file = get_asset()
 
     with open(source_file, 'r') as f:
