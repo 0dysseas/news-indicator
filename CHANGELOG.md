@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.4.0 (2021-07-08)
+### Feature
+* **content:** New content feature ([`d46eed7`](https://github.com/0dysseas/news-indicator/commit/d46eed76062ed00f2b758d3901707d67b400dab5))
+
 ## v2.3.0 (2021-07-07)
 ### Feature
 * **cfg:** Remove build command ([`fa7dfbf`](https://github.com/0dysseas/news-indicator/commit/fa7dfbfabe9bba10083a81e6484bc26a73fcd1c0))
