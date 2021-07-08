@@ -64,6 +64,7 @@ class DownloadWorker(Thread):
         return json_news
 
     def download_content(self):
+        # downloads_content
         while True:
             link = self.input_queue.get()
             response = requests.get(link).json()
