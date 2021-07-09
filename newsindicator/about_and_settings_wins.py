@@ -165,7 +165,7 @@ class Settings(Gtk.ApplicationWindow):
 
 def render_settings_window(s_called, s_int, ntfc_called, ntfc_state, s_state):
     """
-    Render the settings window
+    Render the settings window.
     """
     win = Settings(s_called, s_int, ntfc_called, ntfc_state, s_state)
     win.connect("delete-event", Gtk.main_quit)
@@ -176,7 +176,7 @@ def render_settings_window(s_called, s_int, ntfc_called, ntfc_state, s_state):
 
 def render_about_window():
     """
-    Render the about window
+    Render the about window.
     """
     AboutWindow()
     Gtk.main()
