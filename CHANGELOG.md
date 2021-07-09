@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.3 (2021-07-09)
+### Documentation
+* **settings:** Small fix in docs ([`500d2ff`](https://github.com/0dysseas/news-indicator/commit/500d2ff8c7f46c030b9456078625a6590357ffea))
+
+### Performance
+* **settings:** Performance fix ([`9065318`](https://github.com/0dysseas/news-indicator/commit/906531819adb2c1d6e933781124dae3be73a8920))
+
 ## v2.6.2 (2021-07-09)
 ### Fix
 * **utils:** Minor utils fix ([`f47e55e`](https://github.com/0dysseas/news-indicator/commit/f47e55ee64a9e8c0632f19fcc8271582ae2f1fb9))
