@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.2 (2021-07-09)
+### Fix
+* **settings window:** Settings window fix ([`a698321`](https://github.com/0dysseas/news-indicator/commit/a69832138e7e1614425a7cae2a72211faad5aad1))
+
 ## v2.5.1 (2021-07-09)
 ### Fix
 * **json:** Add new JSON fix ([`ebb3a2c`](https://github.com/0dysseas/news-indicator/commit/ebb3a2c32f4a7ef383c729585c2032147d62f508))
