@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.2 (2021-07-09)
+### Fix
+* **utils:** Minor utils fix ([`f47e55e`](https://github.com/0dysseas/news-indicator/commit/f47e55ee64a9e8c0632f19fcc8271582ae2f1fb9))
+* **template:** Add new template entry ([`b65bc82`](https://github.com/0dysseas/news-indicator/commit/b65bc825c53121ca3d34e5244a36769e9a742573))
+
 ## v2.6.1 (2021-07-09)
 ### Fix
 * **assets:** Minor fix in assets path ([`ab3ffb5`](https://github.com/0dysseas/news-indicator/commit/ab3ffb57b506fb5c547a3208f04417a79787cdb6))
