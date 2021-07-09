@@ -133,7 +133,7 @@ class Settings(Gtk.ApplicationWindow):
 
     def on_interval_change(self, combo, state):
         """
-        Callback function that is fired when the user changes the time interval
+        Callback function that is fired when the user changes the time interval.
         """
         self.settings_called = True
         state.intrvl_change_trig = True
@@ -148,7 +148,7 @@ class Settings(Gtk.ApplicationWindow):
 
     def on_notification_change(self, switch, active):
         """
-        Callback function that is fired upon changing the notification state (ON/OFF)
+        Callback function that is fired upon changing the notification state (ON/OFF).
 
         """
         self.notifications_called = True
