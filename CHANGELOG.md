@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.1 (2021-07-09)
+### Fix
+* **json:** Add new JSON fix ([`ebb3a2c`](https://github.com/0dysseas/news-indicator/commit/ebb3a2c32f4a7ef383c729585c2032147d62f508))
+
 ## v2.5.0 (2021-07-09)
 ### Feature
 * **create menu:** Add new feature in create menu ([`e25d5fa`](https://github.com/0dysseas/news-indicator/commit/e25d5fab56ae8f2879f571d384ae903d6be55c75))

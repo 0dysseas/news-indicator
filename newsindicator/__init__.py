@@ -1,2 +1,2 @@
 #__version__ used as the starting point for SemVer
-__version__ = "2.5.0"
+__version__ = "2.5.1"
