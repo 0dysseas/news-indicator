@@ -29,7 +29,9 @@ class AboutWindow(Gtk.Dialog):
         about.show()
 
     def on_close(self, action, parameter):
-        # destroy window on close
+        """
+        Destroy window on close.
+        """
         action.destroy()
 
     def __repr__(self):
