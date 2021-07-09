@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.3 (2021-07-09)
+### Fix
+* **menu:** Add menu items ([`b755e08`](https://github.com/0dysseas/news-indicator/commit/b755e088d7ef3fbea738fff97bdc192114a5f201))
+
 ## v2.5.2 (2021-07-09)
 ### Fix
 * **settings window:** Settings window fix ([`a698321`](https://github.com/0dysseas/news-indicator/commit/a69832138e7e1614425a7cae2a72211faad5aad1))
