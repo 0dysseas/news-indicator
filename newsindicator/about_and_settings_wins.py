@@ -148,7 +148,7 @@ class Settings(Gtk.ApplicationWindow):
 
     def on_notification_change(self, switch, active):
         """
-        Callback function that is fired upon changing the notification state (ON/OFF).
+        Callback function that is fired upon changing the notification state (ON/OFF)
 
         """
         self.notifications_called = True
