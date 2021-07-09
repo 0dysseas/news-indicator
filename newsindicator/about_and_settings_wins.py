@@ -30,7 +30,7 @@ class AboutWindow(Gtk.Dialog):
 
     def on_close(self, action, parameter):
         """
-        Destroy window on close.
+        Destroy window on close
         """
         action.destroy()
 
