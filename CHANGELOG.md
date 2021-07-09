@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v2.5.0 (2021-07-09)
+### Feature
+* **create menu:** Add new feature in create menu ([`e25d5fa`](https://github.com/0dysseas/news-indicator/commit/e25d5fab56ae8f2879f571d384ae903d6be55c75))
+
+### Documentation
+* **menu:** Enhanced function documentation ([`3c3f0c6`](https://github.com/0dysseas/news-indicator/commit/3c3f0c6083a25271439208c7ad34743c812dc1f7))
+
 ## v2.4.0 (2021-07-08)
 ### Feature
 * **content:** New content feature ([`d46eed7`](https://github.com/0dysseas/news-indicator/commit/d46eed76062ed00f2b758d3901707d67b400dab5))
