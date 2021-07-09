@@ -109,7 +109,9 @@ class NewsIndicator(object):
         self.create_menu(list_of_news)
 
     def create_menu(self, menu_items):
-        # create new indicator instance
+        """
+        Create new indicator instance
+        """
         self.menu = Gtk.Menu()
 
         # loop through the menu items
