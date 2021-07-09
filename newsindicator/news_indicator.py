@@ -112,6 +112,7 @@ class NewsIndicator(object):
         # create new indicator instance
         self.menu = Gtk.Menu()
 
+        # loop through the menu items
         for k, v in enumerate(menu_items):
             # menu item
             first_item = Gtk.MenuItem(v['title'])
