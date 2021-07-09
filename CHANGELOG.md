@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.0 (2021-07-09)
+### Feature
+* **window menu:** Add new window feature ([`b0b788c`](https://github.com/0dysseas/news-indicator/commit/b0b788c9e331b265f478c9d0f394dab64132fb89))
+
+### Fix
+* **window menu:** Small fix ([`48280f5`](https://github.com/0dysseas/news-indicator/commit/48280f5a8542c0b04617efbed8871b608b6d8b31))
+* **utils:** Add pr templates ([`030b988`](https://github.com/0dysseas/news-indicator/commit/030b98875868a2ff74087299e3991778474185dc))
+
+### Documentation
+* **comment:** Minimal change ([`a3ea052`](https://github.com/0dysseas/news-indicator/commit/a3ea05287c31295063cfd0595a85ade2a54a9be7))
+
 ## v2.5.3 (2021-07-09)
 ### Fix
 * **menu:** Add menu items ([`b755e08`](https://github.com/0dysseas/news-indicator/commit/b755e088d7ef3fbea738fff97bdc192114a5f201))
