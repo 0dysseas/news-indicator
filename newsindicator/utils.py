@@ -3,8 +3,10 @@ import os
 
 
 def print_json_object(obj):
-    # A JSON print helper function
-    print 'Printing JSON object'
+    """
+    A JSON print helper function
+    """
+    print ('Printing JSON object')
     print (json.dumps(obj, indent=4))
 
 
