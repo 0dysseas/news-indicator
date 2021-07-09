@@ -9,7 +9,9 @@ def print_json_object(obj):
 
 
 def get_asset(asset='sources'):
-    # gets the assets
+    """
+    Gets the assets from the specified folder
+    """
     absolute_path = os.path.dirname(os.path.abspath(__file__))
 
     if asset is not 'sources':
