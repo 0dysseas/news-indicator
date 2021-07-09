@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.1 (2021-07-09)
+### Fix
+* **assets:** Minor fix in assets path ([`ab3ffb5`](https://github.com/0dysseas/news-indicator/commit/ab3ffb57b506fb5c547a3208f04417a79787cdb6))
+
 ## v2.6.0 (2021-07-09)
 ### Feature
 * **window menu:** Add new window feature ([`b0b788c`](https://github.com/0dysseas/news-indicator/commit/b0b788c9e331b265f478c9d0f394dab64132fb89))
