@@ -102,9 +102,14 @@ class NewsIndicator(object):
             NewsIndicator.notifications = False if not settings_state.notification_state else True
 
     def create_and_update_menu(self, list_of_news):
+        """
+        Wrapper for creating and updating the indicator menu
+        with the list of news.
+        """
         self.create_menu(list_of_news)
 
     def create_menu(self, menu_items):
+        # create new indicator instance
         self.menu = Gtk.Menu()
 
         for k, v in enumerate(menu_items):
@@ -193,7 +198,7 @@ def main():
     download.retrieve_news()
 
     while not output_queue.empty():
-        item = output_queue.get()  
+        item = output_queue.get()
         out_list.append(item)
 
     return out_list
