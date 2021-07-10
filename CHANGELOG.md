@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v2.6.4 (2021-07-10)
+### Fix
+* **templates:** Update templates ([`6d32042`](https://github.com/0dysseas/news-indicator/commit/6d320426cd9213baebd1a1acc8b63422d77ad455))
+
 ## v2.6.3 (2021-07-09)
 ### Documentation
 * **settings:** Small fix in docs ([`500d2ff`](https://github.com/0dysseas/news-indicator/commit/500d2ff8c7f46c030b9456078625a6590357ffea))
