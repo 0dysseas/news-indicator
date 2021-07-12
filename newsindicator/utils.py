@@ -4,7 +4,7 @@ import os
 
 def print_json_object(obj):
     """
-    A JSON print helper function
+    A JSON print helper function.
     """
     print ('Printing JSON object')
     print (json.dumps(obj, indent=4))
@@ -12,7 +12,7 @@ def print_json_object(obj):
 
 def get_asset(asset='sources'):
     """
-    Gets the assets from the specified folder
+    Gets the assets from the specified folder.
     """
     absolute_path = os.path.dirname(os.path.abspath(__file__))
 
