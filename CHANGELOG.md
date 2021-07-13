@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v2.7.0 (2021-07-13)
+### Feature
+* **settings:** Add new feature ([`0c9c757`](https://github.com/0dysseas/news-indicator/commit/0c9c757fb2525452bd62b6c1928f9068e057fcde))
+
+### Fix
+* **contents:** Fix download content ([`e89819b`](https://github.com/0dysseas/news-indicator/commit/e89819b964c2c84d0a5be7b5a5ed3e5dd04050da))
+* **window:** Add constructor ([`b00eb93`](https://github.com/0dysseas/news-indicator/commit/b00eb934c46b61f0d6e7ace27fb1606116ff5cfd))
+
 ## v2.6.5 (2021-07-12)
 ### Fix
 * **utils:** Add new small fix ([`38bc795`](https://github.com/0dysseas/news-indicator/commit/38bc7952d672daf969c2be6e14bc8c06d0a555d6))
