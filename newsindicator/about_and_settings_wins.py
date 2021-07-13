@@ -18,7 +18,9 @@ class AboutWindow(Gtk.Dialog):
     """
 
     def __init__(self):
-        # About window constructor
+        """
+        About window constructor.
+        """
         super(AboutWindow, self).__init__()
         about = Gtk.AboutDialog()
         about.set_program_name('News Indicator')
