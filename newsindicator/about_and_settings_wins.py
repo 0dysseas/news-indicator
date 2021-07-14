@@ -49,7 +49,9 @@ class SettingsState(object):
     """
 
     def __init__(self, intrvl_change_trig, settings_interval, ntfc_change_trig, notification_state):
-        # Notification switch state variables
+        """
+        Notification constructor
+        """
         self.notification_change_trig = ntfc_change_trig
         self.notification_state = notification_state
         # Interval dd menu state variables
