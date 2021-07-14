@@ -57,7 +57,9 @@ class SettingsState(object):
         self.settings_interval = settings_interval
 
     def get_state(self):
-        # gets the overall state
+        """
+        Gets the overall indicator change
+        """
         return self.intrvl_change_trig, self.settings_interval, self.notification_change_trig, self.notification_state
 
     def update_state(self, new_settings_instance_trig, new_interval, new_ntfc_instance_trig, new_ntfc_change):
