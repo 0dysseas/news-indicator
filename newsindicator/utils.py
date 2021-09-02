@@ -23,7 +23,9 @@ def get_asset(asset='sources'):
 
 
 def get_news_sources_from_file():
-    #gets the news sources from the file
+    """
+    Gets the news sources from the file.
+    """
     source_file = get_asset()
 
     with open(source_file, 'r') as f:
