@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v2.9.0 (2021-09-02)
+### Feature
+* **news:** Sep task 1 ([`6420867`](https://github.com/0dysseas/news-indicator/commit/6420867e8120514f6691b6b529b2a1a03866904e))
+
+### Fix
+* **utils:** Fix utils comment ([`d2911f5`](https://github.com/0dysseas/news-indicator/commit/d2911f548a1a33e78786ce21efa7aabc1c389f91))
+* **about:** Fix about window ([`766fe49`](https://github.com/0dysseas/news-indicator/commit/766fe49db52e228ff4c208b9e9ac843629cac118))
+
 ## v2.8.0 (2021-07-14)
 ### Feature
 * **setting window:** Add new feature ([`31185f1`](https://github.com/0dysseas/news-indicator/commit/31185f180640f8ae321fac5302022f1bac562638))
