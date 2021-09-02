@@ -14,7 +14,7 @@ INTERVALS = {0: '10 Minutes', 1: '15 Minutes', 2: '20 Minutes', 3: '30 Minutes',
 
 class AboutWindow(Gtk.Dialog):
     """
-    About window
+    The about window
     """
 
     def __init__(self):
