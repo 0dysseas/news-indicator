@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 
 def show_alert_notifications():
     """
-    Show the alert notification pop-up window
+    Shows the alert notification pop-up window
     """
     # Initialize the d-bus connection and create the notification object
     notify2.init("News Indicator")
@@ -38,7 +38,7 @@ def show_alert_notifications():
 
 class DownloadWorker(Thread):
     """
-    Main class that retrieves the actual articles from the corresponding urls, in a multi-threaded way.
+    Main class that retrieves the actual articles from the corresponding urls,using multiple threads.
     """
 
     def __init__(self, input_queue, out_queue):
