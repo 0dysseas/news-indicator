@@ -1,8 +1,12 @@
 import logging
 import os
 import sys
-from Queue import Queue
 from threading import Thread
+
+try:
+  from Queue import Queue
+except:
+  from queue import Queue
 
 import gi
 

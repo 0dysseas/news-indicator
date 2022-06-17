@@ -2,8 +2,12 @@ import sys
 import signal
 import logging
 import webbrowser
-from Queue import Queue
 from datetime import datetime
+
+try:
+  from Queue import Queue 
+except:
+  from queue import Queue
 
 import gi
 
