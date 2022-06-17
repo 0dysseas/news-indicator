@@ -16,7 +16,7 @@ gi.require_version('AppIndicator3', '0.1')
 import requests
 import notify2
 
-from utils import get_news_sources_from_file, delete_redundant_items
+from .utils import get_news_sources_from_file, delete_redundant_items
 
 NUM_THREADS = 8
 MESSAGE = ' NEWS_API_KEY not found!! \nHave you stored it in ~/.profile?'
