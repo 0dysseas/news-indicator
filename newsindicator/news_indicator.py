@@ -12,6 +12,7 @@ except:
 import gi
 
 gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator', '0.1')
 
 import notify2
 from gi.repository import Gtk, AppIndicator3, GObject
