@@ -19,9 +19,9 @@ from gi.repository import Gtk, AppIndicator3, GObject
 from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED
 
-from get_news import DownloadNewsWorker
-from utils import get_asset
-from about_and_settings_wins import SettingsState, render_settings_window, render_about_window, INTERVALS
+from .get_news import DownloadNewsWorker
+from .utils import get_asset
+from .about_and_settings_wins import SettingsState, render_settings_window, render_about_window, INTERVALS
 
 # Constants
 APP = 'News-Indicator'
