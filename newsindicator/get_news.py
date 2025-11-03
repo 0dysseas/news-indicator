@@ -55,17 +55,56 @@ class DownloadWorker(Thread):
         return self.input_queue
 
     def _form_news_structure(self, json_news):
-        keys_to_remove = ['status', 'sortBy']
-        sub_keys_to_remove = ['description', 'author', 'publishedAt']
+        """
+        Normalize the news JSON and push cleaned article dicts to self.out_queue.
 
-        filtered_news_sources_format = delete_redundant_items(json_news, keys_to_remove)
+        - Safely handles missing or malformed json_news and articles.
+        - Only extracts a small set of useful fields (title, url, source, urlToImage).
+        - Limits to the first 4 articles (configurable here).
+        - Returns a list of processed article dicts.
+        """
+        if not isinstance(json_news, dict):
+            logging.warning("Expected json_news to be a dict, got %s", type(json_news))
+            return []
 
-        # Get the first four articles from each source
-        for _, article in enumerate(filtered_news_sources_format['articles'][:2]):
-            final_news_sources_format = delete_redundant_items(article, sub_keys_to_remove)
-            self.out_queue.put(final_news_sources_format)
+        articles = json_news.get('articles') or []
+        if not isinstance(articles, list):
+            logging.warning("Expected 'articles' to be a list, got %s", type(articles))
+            return []
 
-        return json_news
+        max_items = 4
+        processed = []
+
+        for idx, article in enumerate(articles[:max_items]):
+            if not isinstance(article, dict):
+                logging.debug("Skipping article at index %d because it's not a dict: %r", idx, article)
+                continue
+
+            # Prefer whitelisting fields instead of trying to delete many keys.
+            source = ''
+            src_field = article.get('source')
+            if isinstance(src_field, dict):
+                source = src_field.get('name') or ''
+            elif isinstance(src_field, str):
+                source = src_field
+
+            cleaned = {
+                'title': article.get('title') or '',
+                'url': article.get('url') or '',
+                'source': source,
+                'urlToImage': article.get('urlToImage') or '',
+            }
+
+            # Remove empty values to keep payload small
+            cleaned = {k: v for k, v in cleaned.items() if v}
+
+            if cleaned.get('title') and cleaned.get('url'):
+                self.out_queue.put(cleaned)
+                processed.append(cleaned)
+            else:
+                logging.debug("Skipping article without title or url: %r", article)
+
+        return processed
 
     def download_content(self):
         """
