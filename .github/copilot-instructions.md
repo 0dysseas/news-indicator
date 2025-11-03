@@ -9,7 +9,6 @@ Purpose: quick orientation and actionable conventions so an AI agent can be imme
   - `newsindicator/get_news.py` — retrieval logic: `DownloadNewsWorker.retrieve_news()` builds a queue of endpoints and spawns `DownloadWorker` threads that call `DownloadWorker._form_news_structure()` and push cleaned items into an output `Queue`.
   - `newsindicator/utils.py` — asset & sources loader. `assets/news_sources.txt` contains lines like `KEY = https://...`.
 
-- Big picture / data flow (follow these files to understand behaviour):
   1. `news_indicator.main()` scheduled job runs every interval and instantiates `DownloadNewsWorker`.
   2. `DownloadNewsWorker.retrieve_news()` reads `assets/news_sources.txt` (via `get_news_sources_from_file`) and enqueues API URLs (appending `NEWS_API_KEY`).
   3. `DownloadWorker` threads pull from the input queue, HTTP GET each endpoint (`requests.get`), convert JSON via `_form_news_structure()` and push cleaned dicts into an output `Queue`.
