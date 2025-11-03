@@ -35,3 +35,47 @@ Main features:
 
 Powered by https://newsapi.org/
 Icon made by Freepik from [www.flaticon.com](http://www.flaticon.com)
+
+
+# News Indicator
+
+## Running the test suite
+
+1. Create and activate a virtual environment (recommended)
+    
+    python3 -m venv .venv
+    source .venv/bin/activate
+
+2. Install dependencies
+
+    python3 -m pip install -r requirements.txt
+
+3. Run all tests
+
+    pytest -q
+
+Notes
+- If you run a single test file and see "ModuleNotFoundError: No module named 'newsindicator'", run pytest with the project root on PYTHONPATH:
+    
+    PYTHONPATH=. pytest -q tests/test_get_news.py
+
+- Alternatively, install the package in editable mode (requires setup/pyproject):
+
+    python3 -m pip install -e .
+    pytest -q
+
+
+## Running the test suite
+
+1. Create and activate a virtual environment (recommended)
+    
+    python3 -m venv .venv
+    source .venv/bin/activate
+
+2. Install dependencies
+
+    python3 -m pip install -r requirements.txt
+
+3. Run all tests
+
+    pytest -q
